@@ -12,9 +12,11 @@ namespace ApiPJ.Database {
     public Context(DbContextOptions<Context> options) : base(options) { }
 
     public DbSet<GenericUser> GenericUserContext { get; set; }
+    public DbSet<FullAdress> fullAdresses { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder) {
       builder.ApplyConfiguration(new GenericUserMapping());
+      builder.ApplyConfiguration(new FullAdressMapping());
       base.OnModelCreating(builder);
     }
   }

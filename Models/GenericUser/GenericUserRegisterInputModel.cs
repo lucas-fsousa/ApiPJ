@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ApiPJ.Entities;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace ApiPJ.Models.GenericUser {
@@ -9,44 +10,31 @@ namespace ApiPJ.Models.GenericUser {
     * 
     * [DataType(Dataype.**)] Inform the type of HTML input the field allows
     * 
-    * [MaxLength()] Entityframework structure capable of setting the field size in the database
-    * 
     * [EmailAddress] Informs that the e-mail field has a suitable training structure nome@provider.net/.com/
     * 
     */
   public class GenericUserRegisterInputModel {
-    [MaxLength(20)]
     [StringLength(20)]
     [Required(ErrorMessage = "This field is strictly necessary. Fill in correctly.")]
     public string MaritalStatus { get; set; }
 
-    [MaxLength(250)]
     [StringLength(250)]
     [Required(ErrorMessage = "This field is strictly necessary. Fill in correctly.")]
     public string Name { get; set; }
 
-    [MaxLength(250)]
-    [StringLength(250)]
-    [Required(ErrorMessage = "This field is strictly necessary. Fill in correctly.")]
-    public string Adress { get; set; }
-
-    [MaxLength(7)]
     [StringLength(7)]
     [Required(ErrorMessage = "This field is strictly necessary. Fill in correctly.")]
     public string Rg { get; set; }
-    [MaxLength(11)]
     [StringLength(11)]
     [Required(ErrorMessage = "This field is strictly necessary. Fill in correctly.")]
     public string Cpf { get; set; }
 
-    [MaxLength(15)]
     [StringLength(15)]
     [DataType(DataType.PhoneNumber)]
     [Required(ErrorMessage = "This field is strictly necessary. Fill in correctly.")]
     public string PhoneNumber { get; set; }
 
     [EmailAddress]
-    [MaxLength(250)]
     [StringLength(250)]
     [DataType(DataType.EmailAddress)]
     [Required(ErrorMessage = "This field is strictly necessary. Fill in correctly.")]
@@ -62,5 +50,8 @@ namespace ApiPJ.Models.GenericUser {
     [DataType(DataType.DateTime)]
     [Required(ErrorMessage = "This field is strictly necessary. Fill in correctly.")]
     public DateTime BirthDate { get; set; }
+
+    [Required(ErrorMessage = "This field is strictly necessary. Fill in correctly.")]
+    public FullAdress Adress { get; set; }
   }
 }

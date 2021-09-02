@@ -12,16 +12,16 @@ namespace ApiPJ.Database.Mapping {
       builder.ToTable("TB_USER");
       builder.HasKey(u => u.Id);
       builder.Property(u => u.Id).ValueGeneratedOnAdd();
-      builder.Property(u => u.Rg);
-      builder.Property(u => u.Sex);
-      builder.Property(u => u.Cpf);
-      builder.Property(u => u.Name);
-      builder.Property(u => u.Email);
-      builder.Property(u => u.Adress);
-      builder.Property(u => u.Password);
+      builder.Property(u => u.Rg).HasMaxLength(7);
+      builder.Property(u => u.Sex).HasMaxLength(60);
+      builder.Property(u => u.Cpf).HasMaxLength(11);
+      builder.Property(u => u.Name).HasMaxLength(200);
+      builder.Property(u => u.Email).HasMaxLength(200);
+      builder.Property(u => u.Password).HasMaxLength(200);
       builder.Property(u => u.BirthDate);
       builder.Property(u => u.PhoneNumber);
       builder.Property(u => u.MaritalStatus);
+      builder.HasOne(u => u.Adress).WithMany().HasForeignKey(fk => fk.Id);
 
     }
   }

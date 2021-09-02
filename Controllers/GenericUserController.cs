@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using Business.Methods;
 using ApiPJ.Business.Methods;
 using Swashbuckle.AspNetCore.Annotations;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ApiPJ.Controllers {
   [Route("api/[controller]")]
@@ -29,6 +30,7 @@ namespace ApiPJ.Controllers {
     /// <param name="registerInputModel"></param>
     /// <returns>May return Ok(code 200), BadRequest(code 400) or internal error(code 500)</returns>
     [HttpPost]
+    //[Authorize]
     [Route("register")]
     [SwaggerResponse(statusCode: 200, description: "Registration was completed successfully.")]
     [SwaggerResponse(statusCode: 400, description: "Necessary to fill in the fields correctly.")]
@@ -44,7 +46,6 @@ namespace ApiPJ.Controllers {
 
         //Definitely creates the user
         user = new GenericUser {
-          Adress = registerInputModel.Adress,
           BirthDate = registerInputModel.BirthDate,
           Cpf = registerInputModel.Cpf,
           Email = registerInputModel.Email,
@@ -53,7 +54,13 @@ namespace ApiPJ.Controllers {
           PhoneNumber = registerInputModel.PhoneNumber,
           Rg = registerInputModel.Rg,
           Sex = registerInputModel.Sex,
-          Password = registerInputModel.Password.EncodePassword()
+          Password = registerInputModel.Password.EncodePassword(),
+
+          Adress = new FullAdress {
+            PublicPlace = registerInputModel.Adress.PublicPlace,
+            Reference = registerInputModel.Adress.Reference,
+            Street = registerInputModel.Adress.Street
+          }
         };
         await _genericUser.Register(user);
         _genericUser.Commit();
@@ -65,5 +72,7 @@ namespace ApiPJ.Controllers {
         throw;
       }
     }
+    
+
   }
 }
