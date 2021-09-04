@@ -13,7 +13,7 @@ namespace ApiPJ.Models.Employee {
   * 
   * [MaxLength()] Entityframework structure capable of setting the field size in the database
   */
-  public class EmployeeRegisterInputModel: GenericUserRegisterInputModel {
+  public class EmployeeRegisterInputModel: GenericUserInputModel {
 
     [DataType(DataType.DateTime)]
     [Required(ErrorMessage = "This field is strictly necessary. Fill in correctly.")]

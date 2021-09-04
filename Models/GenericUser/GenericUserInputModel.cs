@@ -13,7 +13,7 @@ namespace ApiPJ.Models.GenericUser {
     * [EmailAddress] Informs that the e-mail field has a suitable training structure nome@provider.net/.com/
     * 
     */
-  public class GenericUserRegisterInputModel {
+  public class GenericUserInputModel {
     [StringLength(40)]
     [Required(ErrorMessage = "This field is strictly necessary. Fill in correctly.")]
     public string MaritalStatus { get; set; }

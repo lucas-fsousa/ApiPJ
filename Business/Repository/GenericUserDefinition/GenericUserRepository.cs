@@ -43,8 +43,23 @@ namespace ApiPJ.Business.Repository.GenericUserDefinition {
       await _context.GenericUserContext.AddAsync(genericUser);
     }
 
-    public Task Update(string cpf, GenericUser genericUser) {
-      throw new NotImplementedException();
+    // replaces the items according to the information passed by the object and updates the items.
+    public async Task Update(GenericUser genericUser) {
+      await _context.GenericUserContext.Where(x => x.Cpf == genericUser.Cpf).ForEachAsync(x => {
+        x.Adress.PublicPlace = genericUser.Adress.PublicPlace;
+        x.Adress.Reference = genericUser.Adress.Reference;
+        x.Adress.Street = genericUser.Adress.Street;
+        x.MaritalStatus = genericUser.MaritalStatus;
+        x.PhoneNumber = genericUser.PhoneNumber;
+        x.BirthDate = genericUser.BirthDate;
+        x.Password = genericUser.Password;
+        x.Email = genericUser.Email;
+        x.Name = genericUser.Name;
+        x.Sex = genericUser.Sex;
+        x.Cpf = genericUser.Cpf;
+        x.Rg = genericUser.Rg;
+      });
+
     }
   }
 }
