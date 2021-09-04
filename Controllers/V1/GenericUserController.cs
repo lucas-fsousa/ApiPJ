@@ -74,6 +74,7 @@ namespace ApiPJ.Controllers.V1 {
         throw;
       }
     }
+
     /// <summary>
     /// You can delete a user based on the CPF(unique) informed.
     /// </summary>
@@ -155,9 +156,88 @@ namespace ApiPJ.Controllers.V1 {
         _logger.LogError(ex.Message);
         return new StatusCodeResult(500);
       }
-      
-      
     }
+
+    /// <summary>
+    /// Returns a user according to the CPF(unique) entered
+    /// </summary>
+    /// <param name="cpf"></param>
+    /// <returns>May return Ok(code 200), notFound(code 404), Unauthorized(code 401) or internal error(code 500)</returns>
+    [HttpGet, Route("getUser/{cpf}")]
+    [SwaggerResponse(statusCode: 500, description: "The request was not completed due to an internal error on the server side.")]
+    [SwaggerResponse(statusCode: 401, description: "The request did not include an authentication token or the authentication token was expired.")]
+    [SwaggerResponse(statusCode: 404, description: "The requested resource was not found")]
+    [SwaggerResponse(statusCode: 200, description: "User located in database", Type = typeof(GenericUserOutputModel))]
+    public async Task<IActionResult> GetUser([FromRoute]string cpf) {
+      try {
+
+        // checks if the requested user is registered.
+        var user = await _genericUser.GetUser(cpf);
+        if(user == null) {
+          return NotFound("The request was not completed. Apparent reason: Does not exist");
+        }
+
+        // Definition of the object that will be returned
+        var userOutPut = new GenericUserOutputModel {
+
+          Adress = user.Adress,
+          BirthDate = user.BirthDate,
+          Cpf = user.Cpf,
+          Email = user.Email,
+          MaritalStatus = user.MaritalStatus,
+          Name = user.Name,
+          PhoneNumber = user.PhoneNumber,
+          Rg = user.Rg,
+          Sex = user.Sex
+        };
+
+        return Ok(userOutPut);
+      } catch(Exception ex) {
+        _logger.LogError(ex.Message);
+        return new StatusCodeResult(500);
+      }
+    }
+
+
+    /// <summary>
+    /// does a paged search and returns a list of 10 users
+    /// </summary>
+    /// <param name="currentPage"></param>
+    /// <returns>May return Ok(code 200), Unauthorized(code 401), badRequest(code 400) or internal error(code 500)</returns>
+    //[Authorize]
+    [HttpGet, Route("getAllUser/{currentPage}")]
+    [SwaggerResponse(statusCode: 500, description: "The request was not completed due to an internal error on the server side.")]
+    [SwaggerResponse(statusCode: 401, description: "The request did not include an authentication token or the authentication token was expired.")]
+    [SwaggerResponse(statusCode: 400, description: "The request was invalid. Check the parameters and try again.")]
+    [SwaggerResponse(statusCode: 200, description: "User located in database", Type = typeof(List<GenericUserOutputModel>))]
+    public async Task<IActionResult> GetAllUser([FromRoute]int currentPage) {
+      try {
+        var list = await _genericUser.GetAllUser(currentPage);
+        if(list == null) {
+          return BadRequest("Oops. The request failed. Try again in a few minutes.");
+        }
+        var newReturn = new List<GenericUserOutputModel>();
+        foreach(var user in list) {
+          var userFound = new GenericUserOutputModel {
+            Adress = user.Adress,
+            BirthDate = user.BirthDate,
+            Cpf = user.Cpf,
+            Email = user.Email,
+            MaritalStatus = user.MaritalStatus,
+            Name = user.Name,
+            PhoneNumber = user.PhoneNumber,
+            Rg = user.Rg,
+            Sex = user.Sex
+          };
+          newReturn.Add(userFound);
+        }
+        return Ok(newReturn);
+      } catch(Exception ex) {
+        _logger.LogError(ex.Message);
+        return new StatusCodeResult(500);
+      }
+    }
+
 
   }
 }

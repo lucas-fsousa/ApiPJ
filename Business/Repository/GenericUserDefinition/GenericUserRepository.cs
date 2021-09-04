@@ -14,15 +14,38 @@ namespace ApiPJ.Business.Repository.GenericUserDefinition {
       _context = context;
     }
 
-    // This method confirms the execution of the procedure and ends the transaction
+    // this method confirms the execution of the procedure and ends the transaction
     public async Task Commit() {
        await _context.SaveChangesAsync();
     }
 
-    //This method is responsible for deleting the entity from the database and all the values ​​that correspond to it.
+    // this method is responsible for deleting the entity from the database and all the values ​​that correspond to it.
     public void Delete(GenericUser genericUser) {
       _context.fullAdresses.Remove(genericUser.Adress);
       _context.GenericUserContext.Remove(genericUser);
+    }
+
+    // this method pagings the database and returns 10 users for each page
+    public async Task<List<GenericUser>> GetAllUser(int currentPage) {
+      int itemsPerPage = 10;
+
+      // Context variables
+      var adressContext = _context.fullAdresses;
+      var userContext = _context.GenericUserContext;
+
+      // Sql query to make a select on two tables and return a list with 10 results.
+      var generic = await adressContext.Skip((currentPage - 1) * itemsPerPage).Take(itemsPerPage)
+        .Select(x => x).Join(userContext, user => user.Id, adress => adress.Id, (adress, user) => new { adress, user })
+        .Where(x => x.adress.Id == x.user.Id).ToListAsync();
+
+      // Filling in the objects related to the executed sql query
+      var result = new List<GenericUser>();
+      foreach(var item in generic) {
+        GenericUser user = item.user;
+        user.Adress = item.adress;
+        result.Add(user);
+      }
+      return result;
     }
 
     // this method performs a search in the database looking for the CPF informed
@@ -39,11 +62,12 @@ namespace ApiPJ.Business.Repository.GenericUserDefinition {
       return result;
     }
 
+    // this method add a new user to the database
     public async Task Register(GenericUser genericUser) {
       await _context.GenericUserContext.AddAsync(genericUser);
     }
 
-    // replaces the items according to the information passed by the object and updates the items.
+    // this method replaces the items according to the information passed by the object and updates the items.
     public async Task Update(GenericUser genericUser) {
       await _context.GenericUserContext.Where(x => x.Cpf == genericUser.Cpf).ForEachAsync(x => {
         x.Adress.PublicPlace = genericUser.Adress.PublicPlace;

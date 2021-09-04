@@ -26,5 +26,19 @@
             <param name="userUpdate"></param>
             <returns>May return Ok(code 200), badRequest(code 400), Unauthorized(code 401) or internal error(code 500)</returns>
         </member>
+        <member name="M:ApiPJ.Controllers.V1.GenericUserController.GetUser(System.String)">
+            <summary>
+            Returns a user according to the CPF(unique) entered
+            </summary>
+            <param name="cpf"></param>
+            <returns>May return Ok(code 200), notFound(code 404), Unauthorized(code 401) or internal error(code 500)</returns>
+        </member>
+        <member name="M:ApiPJ.Controllers.V1.GenericUserController.GetAllUser(System.Int32)">
+            <summary>
+            does a paged search and returns a list of 10 users
+            </summary>
+            <param name="currentPage"></param>
+            <returns>May return Ok(code 200), Unauthorized(code 401), badRequest(code 400) or internal error(code 500)</returns>
+        </member>
     </members>
 </doc>
