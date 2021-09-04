@@ -14,17 +14,29 @@ namespace ApiPJ.Business.Repository.GenericUserDefinition {
       _context = context;
     }
 
-    public void Commit() {
-       _context.SaveChanges();
+    // This method confirms the execution of the procedure and ends the transaction
+    public async Task Commit() {
+       await _context.SaveChangesAsync();
     }
 
-    public Task Delete(string cpf) {
-      throw new NotImplementedException();
+    //This method is responsible for deleting the entity from the database and all the values ​​that correspond to it.
+    public void Delete(GenericUser genericUser) {
+      _context.fullAdresses.Remove(genericUser.Adress);
+      _context.GenericUserContext.Remove(genericUser);
     }
 
     // this method performs a search in the database looking for the CPF informed
     public async Task<GenericUser> GetUser(string cpf) {
-      return await _context.GenericUserContext.FirstOrDefaultAsync(x => x.Cpf == cpf);
+      cpf = cpf.Trim();
+      var result = await _context.GenericUserContext.FirstOrDefaultAsync(x => x.Cpf == cpf);
+
+      // It guarantees that the search result will only be delivered if all entities are filled.
+      if(result != null) {
+        result.Adress = await _context.fullAdresses.FirstOrDefaultAsync(x => x.Id == result.Id);
+        result = result.Adress == null ? null : result; 
+      }
+      
+      return result;
     }
 
     public async Task Register(GenericUser genericUser) {

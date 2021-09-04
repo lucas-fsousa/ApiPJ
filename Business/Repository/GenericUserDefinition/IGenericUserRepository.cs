@@ -9,7 +9,7 @@ namespace ApiPJ.Business.Repository.GenericUserDefinition {
     public Task<GenericUser> GetUser(string cpf);
     public Task Update(string cpf, GenericUser genericUser);
     public Task Register(GenericUser genericUser);
-    public Task Delete(string cpf);
-    public void Commit();
+    public void Delete(GenericUser genericUser);
+    public Task Commit();
   }
 }

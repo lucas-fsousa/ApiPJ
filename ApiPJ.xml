@@ -4,12 +4,19 @@
         <name>ApiPJ</name>
     </assembly>
     <members>
-        <member name="M:ApiPJ.Controllers.GenericUserController.Register(ApiPJ.Models.GenericUser.GenericUserRegisterInputModel)">
+        <member name="M:ApiPJ.Controllers.V1.GenericUserController.Register(ApiPJ.Models.GenericUser.GenericUserRegisterInputModel)">
             <summary>
             Allows you to create a new system user who is not registered
             </summary>
             <param name="registerInputModel"></param>
             <returns>May return Ok(code 200), BadRequest(code 400) or internal error(code 500)</returns>
+        </member>
+        <member name="M:ApiPJ.Controllers.V1.GenericUserController.Delete(System.String)">
+            <summary>
+            You can delete a user based on the CPF(unique) informed.
+            </summary>
+            <param name="cpf"></param>
+            <returns>May return Ok(code 200), notFound(code 404) or internal error(code 500)</returns>
         </member>
     </members>
 </doc>

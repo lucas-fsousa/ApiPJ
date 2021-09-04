@@ -14,7 +14,7 @@ namespace ApiPJ.Models.GenericUser {
     * 
     */
   public class GenericUserRegisterInputModel {
-    [StringLength(20)]
+    [StringLength(40)]
     [Required(ErrorMessage = "This field is strictly necessary. Fill in correctly.")]
     public string MaritalStatus { get; set; }
 
@@ -23,8 +23,13 @@ namespace ApiPJ.Models.GenericUser {
     public string Name { get; set; }
 
     [StringLength(7)]
+    [MinLength(7)]
+    [MaxLength(7)]
     [Required(ErrorMessage = "This field is strictly necessary. Fill in correctly.")]
     public string Rg { get; set; }
+
+    [MinLength(11)]
+    [MaxLength(11)]
     [StringLength(11)]
     [Required(ErrorMessage = "This field is strictly necessary. Fill in correctly.")]
     public string Cpf { get; set; }

@@ -14,8 +14,8 @@ using ApiPJ.Business.Methods;
 using Swashbuckle.AspNetCore.Annotations;
 using Microsoft.AspNetCore.Authorization;
 
-namespace ApiPJ.Controllers {
-  [Route("api/[controller]")]
+namespace ApiPJ.Controllers.V1 {
+  [Route("api/v1/[controller]")]
   [ApiController]
   public class GenericUserController : ControllerBase {
     private readonly IGenericUserRepository _genericUser;
@@ -30,7 +30,6 @@ namespace ApiPJ.Controllers {
     /// <param name="registerInputModel"></param>
     /// <returns>May return Ok(code 200), BadRequest(code 400) or internal error(code 500)</returns>
     [HttpPost]
-    //[Authorize]
     [Route("register")]
     [SwaggerResponse(statusCode: 200, description: "Registration was completed successfully.")]
     [SwaggerResponse(statusCode: 400, description: "Necessary to fill in the fields correctly.")]
@@ -54,7 +53,9 @@ namespace ApiPJ.Controllers {
           PhoneNumber = registerInputModel.PhoneNumber,
           Rg = registerInputModel.Rg,
           Sex = registerInputModel.Sex,
-          Password = registerInputModel.Password.EncodePassword(),
+
+          //To ensure that the password has a unique HASH, two strings are concatenated, the CPF identifier and the password itself defined by the user
+          Password = $"{registerInputModel.Password + registerInputModel.Cpf}".EncodePassword(),
 
           Adress = new FullAdress {
             PublicPlace = registerInputModel.Adress.PublicPlace,
@@ -62,8 +63,10 @@ namespace ApiPJ.Controllers {
             Street = registerInputModel.Adress.Street
           }
         };
+
+        // tries to insert the data into the database and if everything goes well, the information is committed
         await _genericUser.Register(user);
-        _genericUser.Commit();
+        await _genericUser.Commit();
 
         return Ok("This user has been successfully registered."); 
       } catch(Exception ex) {
@@ -72,7 +75,35 @@ namespace ApiPJ.Controllers {
         throw;
       }
     }
-    
+    /// <summary>
+    /// You can delete a user based on the CPF(unique) informed.
+    /// </summary>
+    /// <param name="cpf"></param>
+    /// <returns>May return Ok(code 200), notFound(code 404) or internal error(code 500)</returns>
+    [Route("delete")]
+    //[Authorize]
+    [HttpDelete()]
+    [SwaggerResponse(statusCode: 200, description: "Deletion completed successfully.")]
+    [SwaggerResponse(statusCode: 404, description: "User not found / Does not exist.")]
+    [SwaggerResponse(statusCode: 500, description: "Internal Error.")]
+    public async Task<IActionResult> Delete(string cpf) {
+      try {
+
+        // query the database to see if the user is valid and then check if the result is null
+        var user = await _genericUser.GetUser(cpf);
+        if(user == null) {
+          return NotFound("The request was not completed. Apparent reason: Does not exist");
+        }
+
+        //if the user is valid, it is deleted and then the information is committed.
+        _genericUser.Delete(user);
+        await _genericUser.Commit();
+      } catch(Exception ex) {
+        _logger.LogError(ex.Message);
+        return new StatusCodeResult(500);
+      }
+      return Ok("This user has been successfully deleted.");
+    }
 
   }
 }
