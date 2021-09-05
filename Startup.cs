@@ -47,27 +47,30 @@ namespace ApiPJ {
           Type = SecuritySchemeType.ApiKey,
           Scheme = "Bearer"
         });
-        c.AddSecurityRequirement(new OpenApiSecurityRequirement {{ 
+
+        c.AddSecurityRequirement(new OpenApiSecurityRequirement {{
           new OpenApiSecurityScheme {
             Reference = new OpenApiReference {
               Type = ReferenceType.SecurityScheme,
               Id = "Bearer"
             }
           },
-          Array.Empty<string>()
-        }});
+           Array.Empty<string>()
+          }
+        });
       });
 
-      var secretKey = Encoding.ASCII.GetBytes(Configuration.GetSection("JwtConfigurations:Secret").Value);
+      var secret = Encoding.ASCII.GetBytes(Configuration.GetSection("JwtConfigurations:Secret").Value);
       services.AddAuthentication(x => {
         x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
         x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-      }).AddJwtBearer(x => {
+      })
+      .AddJwtBearer(x => {
         x.RequireHttpsMetadata = false;
         x.SaveToken = true;
-        x.TokenValidationParameters = new TokenValidationParameters { 
+        x.TokenValidationParameters = new TokenValidationParameters {
           ValidateIssuerSigningKey = true,
-          IssuerSigningKey = new SymmetricSecurityKey(secretKey),
+          IssuerSigningKey = new SymmetricSecurityKey(secret),
           ValidateIssuer = false,
           ValidateAudience = false
         };
@@ -98,8 +101,9 @@ namespace ApiPJ {
 
       app.UseRouting();
 
-      app.UseAuthorization();
       app.UseAuthentication();
+      app.UseAuthorization();
+      
 
       app.UseEndpoints(endpoints => {
         endpoints.MapControllers();

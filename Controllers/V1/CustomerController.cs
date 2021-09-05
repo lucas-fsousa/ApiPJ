@@ -5,6 +5,7 @@ using ApiPJ.Entities;
 using ApiPJ.Models.GenericUser;
 using ApiPJ.Models.Login;
 using Business.Methods;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Swashbuckle.AspNetCore.Annotations;
@@ -26,10 +27,22 @@ namespace ApiPJ.Controllers.V1 {
       _authentication = authentication;
     }
 
+    /// <summary>
+    /// Authenticates the user according to the credentials entered.
+    /// </summary>
+    /// <param name="credentials"></param>
+    /// <returns>May return Ok(code 200), BadRequest(code 400) or internal error(code 500)</returns>
+    [SwaggerResponse(statusCode: 200, description: "The request was successfully completed.")]
+    [SwaggerResponse(statusCode: 400, description: "The request was invalid. Check the parameters and try again.")]
+    [SwaggerResponse(statusCode: 500, description: "The request was not completed due to an internal error on the server side.")]
+    [FilterValidState]
     [HttpPost, Route("login")]
-    public async Task<IActionResult> LogIn([FromBody]LoginInputViewModel credentials) {
+    public async Task<IActionResult> LogIn(LoginInputViewModel credentials) {
       try {
+
+        // The password is encrypted with a concatenation of the password entered with the unique cpf
         credentials.Password = (credentials.Password+credentials.Cpf).EncodePassword().Trim();
+
         var result = await _customer.LogIn(credentials);
         if(result == null) {
           return BadRequest();
@@ -105,13 +118,13 @@ namespace ApiPJ.Controllers.V1 {
     /// </summary>
     /// <param name="cpf"></param>
     /// <returns>May return Ok(code 200), notFound(code 404), Unauthorized(code 401) or internal error(code 500)</returns>
-    [HttpDelete, Route("delete/{cpf}")]
-    //[Authorize]   
+    [HttpDelete, Route("delete")]
+    [Authorize]   
     [SwaggerResponse(statusCode: 200, description: "The request was successfully completed.")]
     [SwaggerResponse(statusCode: 401, description: "The request did not include an authentication token or the authentication token was expired.")]
     [SwaggerResponse(statusCode: 404, description: "The requested resource was not found")]
     [SwaggerResponse(statusCode: 500, description: "The request was not completed due to an internal error on the server side.")]
-    public async Task<IActionResult> Delete([FromRoute]string cpf) {
+    public async Task<IActionResult> Delete(string cpf) {
       try {
 
         // query the database to see if the user is valid and then check if the result is null
@@ -136,13 +149,14 @@ namespace ApiPJ.Controllers.V1 {
     /// <param name="cpf"></param>
     /// <param name="userUpdate"></param>
     /// <returns>May return Ok(code 200), badRequest(code 400), Unauthorized(code 401) or internal error(code 500)</returns>
-    [HttpPut, Route("update/{cpf}")]
+    [HttpPut, Route("update")]
+    [Authorize]
     [SwaggerResponse(statusCode: 200, description: "The request was successfully completed.")]
     [SwaggerResponse(statusCode: 401, description: "The request did not include an authentication token or the authentication token was expired.")]
     [SwaggerResponse(statusCode: 400, description: "The request was invalid. Check the parameters and try again.")]
     [SwaggerResponse(statusCode: 500, description: "The request was not completed due to an internal error on the server side.")]
     [FilterValidState]
-    public async Task<IActionResult> Update([FromRoute]string cpf, [FromBody]GenericUserUpdateInputModel userUpdate) {
+    public async Task<IActionResult> Update(string cpf, GenericUserUpdateInputModel userUpdate) {
       try {
         var oldUser = await _customer.GetUser(cpf);
         if(oldUser == null) {
@@ -188,12 +202,13 @@ namespace ApiPJ.Controllers.V1 {
     /// </summary>
     /// <param name="cpf"></param>
     /// <returns>May return Ok(code 200), notFound(code 404), Unauthorized(code 401) or internal error(code 500)</returns>
-    [HttpGet, Route("getUser/{cpf}")]
+    [HttpGet, Route("getUser")]
+    [Authorize]
     [SwaggerResponse(statusCode: 500, description: "The request was not completed due to an internal error on the server side.")]
     [SwaggerResponse(statusCode: 401, description: "The request did not include an authentication token or the authentication token was expired.")]
     [SwaggerResponse(statusCode: 404, description: "The requested resource was not found")]
     [SwaggerResponse(statusCode: 200, description: "User located in database", Type = typeof(GenericUserOutputModel))]
-    public async Task<IActionResult> GetUser([FromRoute]string cpf) {
+    public async Task<IActionResult> GetUser(string cpf) {
       try {
 
         // checks if the requested user is registered.
@@ -230,17 +245,21 @@ namespace ApiPJ.Controllers.V1 {
     /// <param name="currentPage"></param>
     /// <returns>May return Ok(code 200), Unauthorized(code 401), badRequest(code 400) or internal error(code 500)</returns>
     //[Authorize]
-    [HttpGet, Route("getAllUser/{currentPage}")]
+    [HttpGet, Route("getAllUser")]
+    [Authorize]
     [SwaggerResponse(statusCode: 500, description: "The request was not completed due to an internal error on the server side.")]
     [SwaggerResponse(statusCode: 401, description: "The request did not include an authentication token or the authentication token was expired.")]
     [SwaggerResponse(statusCode: 400, description: "The request was invalid. Check the parameters and try again.")]
     [SwaggerResponse(statusCode: 200, description: "User located in database", Type = typeof(List<GenericUserOutputModel>))]
-    public async Task<IActionResult> GetAllUser([FromRoute]int currentPage) {
+    public async Task<IActionResult> GetAllUser(int currentPage) {
       try {
+
+        // performs a search in the base and then checks if the result of the list is null
         var list = await _customer.GetAllUser(currentPage);
         if(list == null) {
           return BadRequest("Oops. The request failed. Try again in a few minutes.");
         }
+
         var newReturn = new List<GenericUserOutputModel>();
         foreach(var user in list) {
           var userFound = new GenericUserOutputModel {

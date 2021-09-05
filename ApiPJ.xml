@@ -4,6 +4,13 @@
         <name>ApiPJ</name>
     </assembly>
     <members>
+        <member name="M:ApiPJ.Controllers.V1.CustomerController.LogIn(ApiPJ.Models.Login.LoginInputViewModel)">
+            <summary>
+            Authenticates the user according to the credentials entered.
+            </summary>
+            <param name="credentials"></param>
+            <returns>May return Ok(code 200), BadRequest(code 400) or internal error(code 500)</returns>
+        </member>
         <member name="M:ApiPJ.Controllers.V1.CustomerController.Register(ApiPJ.Models.GenericUser.GenericUserInputModel)">
             <summary>
             Allows you to create a new system user who is not registered
