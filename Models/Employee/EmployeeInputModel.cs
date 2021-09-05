@@ -1,4 +1,4 @@
-﻿using ApiPJ.Models.GenericUser;
+﻿using ApiPJ.Models.Customer;
 using System;
 using System.ComponentModel.DataAnnotations;
 
@@ -15,7 +15,7 @@ namespace ApiPJ.Models.Employee {
   * 
   * [Range()] Defines the range of desired values
   */
-  public class EmployeeRegisterInputModel: GenericUserInputModel {
+  public class EmployeeInputModel: CustomerInputModel {
 
     [DataType(DataType.DateTime)]
     [Required(ErrorMessage = "This field is strictly necessary. Fill in correctly.")]
@@ -32,7 +32,7 @@ namespace ApiPJ.Models.Employee {
     public string FunctionName { get; set; }
 
     [Required(ErrorMessage = "This field is strictly necessary. Fill in correctly.")]
-    public float ContractualSalary { get; set; }
+    public decimal ContractualSalary { get; set; }
 
     [Required(ErrorMessage = "This field is strictly necessary. Fill in correctly.")]
     [Range(0, 10)]

@@ -2,7 +2,7 @@
 using ApiPJ.Business.Repository.CustomerDefinition;
 using ApiPJ.Configurations.Security;
 using ApiPJ.Entities;
-using ApiPJ.Models.GenericUser;
+using ApiPJ.Models.Customer;
 using ApiPJ.Models.Login;
 using Business.Methods;
 using Microsoft.AspNetCore.Authorization;
@@ -59,7 +59,6 @@ namespace ApiPJ.Controllers.V1 {
         _logger.LogError(ex.Message);
         return new StatusCodeResult(500);
       }
-      
     }
 
 
@@ -73,7 +72,7 @@ namespace ApiPJ.Controllers.V1 {
     [SwaggerResponse(statusCode: 400, description: "The request was invalid. Check the parameters and try again.")]
     [SwaggerResponse(statusCode: 500, description: "The request was not completed due to an internal error on the server side.")]
     [FilterValidState]
-    public async Task<IActionResult> Register([FromBody]GenericUserInputModel registerInputModel) {
+    public async Task<IActionResult> Register([FromBody]CustomerInputModel registerInputModel) {
       try {
         //Checks if the user exists by validating the information.
         var user = await _customer.GetUser(registerInputModel.Cpf);
@@ -156,7 +155,7 @@ namespace ApiPJ.Controllers.V1 {
     [SwaggerResponse(statusCode: 400, description: "The request was invalid. Check the parameters and try again.")]
     [SwaggerResponse(statusCode: 500, description: "The request was not completed due to an internal error on the server side.")]
     [FilterValidState]
-    public async Task<IActionResult> Update(string cpf, GenericUserUpdateInputModel userUpdate) {
+    public async Task<IActionResult> Update(string cpf, CustomerUpdateInputModel userUpdate) {
       try {
         var oldUser = await _customer.GetUser(cpf);
         if(oldUser == null) {
@@ -202,12 +201,12 @@ namespace ApiPJ.Controllers.V1 {
     /// </summary>
     /// <param name="cpf"></param>
     /// <returns>May return Ok(code 200), notFound(code 404), Unauthorized(code 401) or internal error(code 500)</returns>
-    [HttpGet, Route("getUser")]
+    [HttpGet, Route("getCustomer")]
     [Authorize]
     [SwaggerResponse(statusCode: 500, description: "The request was not completed due to an internal error on the server side.")]
     [SwaggerResponse(statusCode: 401, description: "The request did not include an authentication token or the authentication token was expired.")]
     [SwaggerResponse(statusCode: 404, description: "The requested resource was not found")]
-    [SwaggerResponse(statusCode: 200, description: "User located in database", Type = typeof(GenericUserOutputModel))]
+    [SwaggerResponse(statusCode: 200, description: "User located in database", Type = typeof(CustomerOutputModel))]
     public async Task<IActionResult> GetUser(string cpf) {
       try {
 
@@ -218,7 +217,7 @@ namespace ApiPJ.Controllers.V1 {
         }
 
         // Definition of the object that will be returned
-        var userOutPut = new GenericUserOutputModel {
+        var userOutPut = new CustomerOutputModel {
 
           Adress = user.Adress,
           BirthDate = user.BirthDate,
@@ -245,12 +244,12 @@ namespace ApiPJ.Controllers.V1 {
     /// <param name="currentPage"></param>
     /// <returns>May return Ok(code 200), Unauthorized(code 401), badRequest(code 400) or internal error(code 500)</returns>
     //[Authorize]
-    [HttpGet, Route("getAllUser")]
+    [HttpGet, Route("getCustomers")]
     [Authorize]
     [SwaggerResponse(statusCode: 500, description: "The request was not completed due to an internal error on the server side.")]
     [SwaggerResponse(statusCode: 401, description: "The request did not include an authentication token or the authentication token was expired.")]
     [SwaggerResponse(statusCode: 400, description: "The request was invalid. Check the parameters and try again.")]
-    [SwaggerResponse(statusCode: 200, description: "User located in database", Type = typeof(List<GenericUserOutputModel>))]
+    [SwaggerResponse(statusCode: 200, description: "User located in database", Type = typeof(List<CustomerOutputModel>))]
     public async Task<IActionResult> GetAllUser(int currentPage) {
       try {
 
@@ -260,9 +259,9 @@ namespace ApiPJ.Controllers.V1 {
           return BadRequest("Oops. The request failed. Try again in a few minutes.");
         }
 
-        var newReturn = new List<GenericUserOutputModel>();
+        var newReturn = new List<CustomerOutputModel>();
         foreach(var user in list) {
-          var userFound = new GenericUserOutputModel {
+          var userFound = new CustomerOutputModel {
             Adress = user.Adress,
             BirthDate = user.BirthDate,
             Cpf = user.Cpf,

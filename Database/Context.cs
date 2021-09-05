@@ -1,11 +1,6 @@
 ﻿using ApiPJ.Database.Mapping;
 using ApiPJ.Entities;
-using ApiPJ.Models.GenericUser;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace ApiPJ.Database {
   public class Context: DbContext {

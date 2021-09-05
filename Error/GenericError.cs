@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace ApiPJ.Error {
   public static class GenericError {
@@ -9,7 +6,6 @@ namespace ApiPJ.Error {
 
     internal static void AddError(string message) {
       List.Add(message);
-      
     }
   }
 }

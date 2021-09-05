@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ApiPJ.Migrations
 {
-    public partial class Init : Migration
+    public partial class Init1 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -57,8 +57,9 @@ namespace ApiPJ.Migrations
                     DemissionDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     WalletWorkId = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     FunctionName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ContractualSalary = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    ContractualSalary = table.Column<decimal>(type: "decimal(2,2)", precision: 2, nullable: false),
                     AcessLevel = table.Column<int>(type: "int", nullable: false),
+                    Active = table.Column<bool>(type: "bit", nullable: false),
                     MaritalStatus = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     Rg = table.Column<string>(type: "nvarchar(7)", maxLength: 7, nullable: false),

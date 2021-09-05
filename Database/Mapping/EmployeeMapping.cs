@@ -1,10 +1,6 @@
 ﻿using ApiPJ.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace ApiPJ.Database.Mapping {
   public class EmployeeMapping: IEntityTypeConfiguration<Employee> {
@@ -30,6 +26,7 @@ namespace ApiPJ.Database.Mapping {
       builder.Property(u => u.WalletWorkId).IsRequired();
       builder.Property(u => u.ContractualSalary).IsRequired().HasPrecision(2);
       builder.Property(u => u.AcessLevel).IsRequired();
+      builder.Property(u => u.Active).IsRequired();
     }
   }
 }

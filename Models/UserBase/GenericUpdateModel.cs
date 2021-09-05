@@ -1,13 +1,8 @@
 ﻿using ApiPJ.Entities;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace ApiPJ.Models.GenericUser {
-  public class GenericUserUpdateInputModel {
-    /* ------------ GLOSSARY ---------------
+namespace ApiPJ.Models.UserBase {
+  /* ------------ GLOSSARY ---------------
     * [StringLenght()] sets the maximum number of characters allowed by the field
     * 
     * [Required(ErrorMessage ="" )] informs that the field is necessary and displays an error message if not filled out properly
@@ -17,6 +12,8 @@ namespace ApiPJ.Models.GenericUser {
     * [EmailAddress] Informs that the e-mail field has a suitable training structure nome@provider.net/.com/
     * 
     */
+
+  public abstract class GenericUpdateModel {
     [StringLength(40)]
     [Required(ErrorMessage = "This field is strictly necessary. Fill in correctly.")]
     public string MaritalStatus { get; set; }
@@ -45,5 +42,5 @@ namespace ApiPJ.Models.GenericUser {
 
     [Required(ErrorMessage = "This field is strictly necessary. Fill in correctly.")]
     public FullAdress Adress { get; set; }
-    }
+  }
 }

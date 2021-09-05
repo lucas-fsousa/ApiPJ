@@ -2,7 +2,6 @@
 using ApiPJ.Entities;
 using ApiPJ.Models.Login;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -22,7 +21,7 @@ namespace ApiPJ.Business.Repository.EmployeeDefinition {
       _context.EmployeeContext.Remove(employee);
     }
 
-    public async Task<List<Employee>> GetAllUser(int currentPage) {
+    public async Task<List<Employee>> GetEmployees(int currentPage) {
       int itemsPerPage = 10;
 
       // Context variables
@@ -44,7 +43,7 @@ namespace ApiPJ.Business.Repository.EmployeeDefinition {
     }
 
     // this method performs a search in the database looking for the CPF informed
-    public async Task<Employee> GetUser(string cpf) {
+    public async Task<Employee> GetEmployee(string cpf) {
       cpf = cpf.Trim();
       var employee = _context.EmployeeContext;
       var adress = _context.FullAdressesContext;
@@ -92,6 +91,7 @@ namespace ApiPJ.Business.Repository.EmployeeDefinition {
         x.WalletWorkId = employee.WalletWorkId;
         x.FunctionName = employee.FunctionName;
         x.AcessLevel = employee.AcessLevel;
+        x.Active = employee.Active;
       });
     }
 

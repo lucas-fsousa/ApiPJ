@@ -2,7 +2,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace ApiPJ.Models.GenericUser {
+namespace ApiPJ.Models.Customer {
   /* ------------ GLOSSARY ---------------
     * [StringLenght()] sets the maximum number of characters allowed by the field
     * 
@@ -17,7 +17,7 @@ namespace ApiPJ.Models.GenericUser {
     * [MinLenght()] Set minimum string size
     * 
     */
-  public class GenericUserInputModel {
+  public class CustomerInputModel {
     [StringLength(40)]
     [Required(ErrorMessage = "This field is strictly necessary. Fill in correctly.")]
     public string MaritalStatus { get; set; }

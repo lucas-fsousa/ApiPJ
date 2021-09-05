@@ -83,6 +83,9 @@ namespace ApiPJ.Migrations
                     b.Property<int>("AcessLevel")
                         .HasColumnType("int");
 
+                    b.Property<bool>("Active")
+                        .HasColumnType("bit");
+
                     b.Property<DateTime>("AdmissionDate")
                         .HasColumnType("datetime2");
 

@@ -1,6 +1,4 @@
-﻿using ApiPJ.Entities;
-using ApiPJ.Entities.Base;
-using ApiPJ.Models.Login;
+﻿using ApiPJ.Entities.Base;
 
 namespace ApiPJ.Configurations.Security {
   public interface IAuthenticationService {

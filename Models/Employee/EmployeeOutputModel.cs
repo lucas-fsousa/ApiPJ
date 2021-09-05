@@ -1,8 +1,8 @@
-﻿using ApiPJ.Entities.Base;
+﻿using ApiPJ.Models.UserBase;
 using System;
 
-namespace ApiPJ.Entities {
-  public class Employee: GenericUserBase {
+namespace ApiPJ.Models.Employee {
+  public class EmployeeOutputModel: GenericOutputModel {
     public DateTime AdmissionDate { get; set; }
     public DateTime DemissionDate { get; set; }
     public string WalletWorkId { get; set; }

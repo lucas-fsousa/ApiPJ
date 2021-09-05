@@ -1,5 +1,4 @@
-﻿using ApiPJ.Entities;
-using ApiPJ.Entities.Base;
+﻿using ApiPJ.Entities.Base;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;

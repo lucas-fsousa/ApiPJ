@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ApiPJ.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20210905164643_Init1")]
+    [Migration("20210905190845_Init1")]
     partial class Init1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -84,6 +84,9 @@ namespace ApiPJ.Migrations
 
                     b.Property<int>("AcessLevel")
                         .HasColumnType("int");
+
+                    b.Property<bool>("Active")
+                        .HasColumnType("bit");
 
                     b.Property<DateTime>("AdmissionDate")
                         .HasColumnType("datetime2");
