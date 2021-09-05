@@ -7,9 +7,9 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace ApiPJ.Database.Mapping {
-  public class GenericUserMapping: IEntityTypeConfiguration<GenericUser> {
-    public void Configure(EntityTypeBuilder<GenericUser> builder) {
-      builder.ToTable("TB_USER");
+  public class CustomerMapping: IEntityTypeConfiguration<Customer> {
+    public void Configure(EntityTypeBuilder<Customer> builder) {
+      builder.ToTable("TB_CUSTOMER");
       builder.HasKey(u => u.Id);
       builder.HasIndex(u => u.Cpf).IsUnique();
       builder.Property(u => u.Id).ValueGeneratedOnAdd();

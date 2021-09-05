@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace ApiPJ.Entities {
-  public class GenericUser {
-
+namespace ApiPJ.Entities.Base {
+  public abstract class GenericUserBase {
     public int Id { get; set; }
     public string MaritalStatus { get; set; }
     public string Name { get; set; }
@@ -14,6 +16,5 @@ namespace ApiPJ.Entities {
     public string Sex { get; set; }
     public DateTime BirthDate { get; set; }
     public FullAdress Adress { get; set; }
-
   }
 }

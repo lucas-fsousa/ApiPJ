@@ -4,21 +4,21 @@
         <name>ApiPJ</name>
     </assembly>
     <members>
-        <member name="M:ApiPJ.Controllers.V1.GenericUserController.Register(ApiPJ.Models.GenericUser.GenericUserInputModel)">
+        <member name="M:ApiPJ.Controllers.V1.CustomerController.Register(ApiPJ.Models.GenericUser.GenericUserInputModel)">
             <summary>
             Allows you to create a new system user who is not registered
             </summary>
             <param name="registerInputModel"></param>
             <returns>May return Ok(code 200), BadRequest(code 400) or internal error(code 500)</returns>
         </member>
-        <member name="M:ApiPJ.Controllers.V1.GenericUserController.Delete(System.String)">
+        <member name="M:ApiPJ.Controllers.V1.CustomerController.Delete(System.String)">
             <summary>
             You can delete a user based on the CPF(unique) informed.
             </summary>
             <param name="cpf"></param>
             <returns>May return Ok(code 200), notFound(code 404), Unauthorized(code 401) or internal error(code 500)</returns>
         </member>
-        <member name="M:ApiPJ.Controllers.V1.GenericUserController.Update(System.String,ApiPJ.Models.GenericUser.GenericUserUpdateInputModel)">
+        <member name="M:ApiPJ.Controllers.V1.CustomerController.Update(System.String,ApiPJ.Models.GenericUser.GenericUserUpdateInputModel)">
             <summary>
             Update a user according to the CPF entered
             </summary>
@@ -26,14 +26,14 @@
             <param name="userUpdate"></param>
             <returns>May return Ok(code 200), badRequest(code 400), Unauthorized(code 401) or internal error(code 500)</returns>
         </member>
-        <member name="M:ApiPJ.Controllers.V1.GenericUserController.GetUser(System.String)">
+        <member name="M:ApiPJ.Controllers.V1.CustomerController.GetUser(System.String)">
             <summary>
             Returns a user according to the CPF(unique) entered
             </summary>
             <param name="cpf"></param>
             <returns>May return Ok(code 200), notFound(code 404), Unauthorized(code 401) or internal error(code 500)</returns>
         </member>
-        <member name="M:ApiPJ.Controllers.V1.GenericUserController.GetAllUser(System.Int32)">
+        <member name="M:ApiPJ.Controllers.V1.CustomerController.GetAllUser(System.Int32)">
             <summary>
             does a paged search and returns a list of 10 users
             </summary>

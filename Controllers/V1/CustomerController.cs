@@ -1,28 +1,54 @@
-﻿using ApiPJ.Business.Repository.GenericUserDefinition;
+﻿using ApiPJ.Business.Methods;
+using ApiPJ.Business.Repository.CustomerDefinition;
+using ApiPJ.Configurations.Security;
 using ApiPJ.Entities;
-using ApiPJ.Error;
 using ApiPJ.Models.GenericUser;
-using Microsoft.AspNetCore.Http;
+using ApiPJ.Models.Login;
+using Business.Methods;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Swashbuckle.AspNetCore.Annotations;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using Business.Methods;
-using ApiPJ.Business.Methods;
-using Swashbuckle.AspNetCore.Annotations;
-using Microsoft.AspNetCore.Authorization;
 
 namespace ApiPJ.Controllers.V1 {
   [Route("api/v1/[controller]")]
   [ApiController]
-  public class GenericUserController : ControllerBase {
-    private readonly IGenericUserRepository _genericUser;
-    private readonly ILogger<GenericUserController> _logger;
-    public GenericUserController(IGenericUserRepository genericUserRepository, ILogger<GenericUserController> logger) {
-      _genericUser = genericUserRepository;
+  public class CustomerController : ControllerBase {
+    private readonly ICustomerRepository _customer;
+    private readonly ILogger<CustomerController> _logger;
+    private readonly IAuthenticationService _authentication;
+
+    public CustomerController(ICustomerRepository genericUserRepository, ILogger<CustomerController> logger, IAuthenticationService authentication) {
+      _customer = genericUserRepository;
+      _logger = logger;
+      _authentication = authentication;
     }
+
+    [HttpPost, Route("login")]
+    public async Task<IActionResult> LogIn([FromBody]LoginInputViewModel credentials) {
+      try {
+        credentials.Password = (credentials.Password+credentials.Cpf).EncodePassword().Trim();
+        var result = await _customer.LogIn(credentials);
+        if(result == null) {
+          return BadRequest();
+        }
+
+        var token = _authentication.GenerateToken(result);
+        var returnAuthentication = new LoginOutputViewModel {
+          AuthenticationToken = token,
+          Cpf = result.Cpf,
+          FirstName = result.Name.Trim().Split()[0]
+        };
+        return Ok(returnAuthentication);
+      } catch(Exception ex) {
+        _logger.LogError(ex.Message);
+        return new StatusCodeResult(500);
+      }
+      
+    }
+
 
     /// <summary>
     /// Allows you to create a new system user who is not registered
@@ -37,13 +63,13 @@ namespace ApiPJ.Controllers.V1 {
     public async Task<IActionResult> Register([FromBody]GenericUserInputModel registerInputModel) {
       try {
         //Checks if the user exists by validating the information.
-        var user = await _genericUser.GetUser(registerInputModel.Cpf);
+        var user = await _customer.GetUser(registerInputModel.Cpf);
         if(user != null) {
           return BadRequest("This user cannot be registered. Reasons: Exists, is locked or is invalid.");
         }
 
         //Definitely creates the user
-        user = new GenericUser {
+        user = new Customer {
           BirthDate = registerInputModel.BirthDate,
           Cpf = registerInputModel.Cpf,
           Email = registerInputModel.Email,
@@ -64,14 +90,13 @@ namespace ApiPJ.Controllers.V1 {
         };
 
         // tries to insert the data into the database and if everything goes well, the information is committed
-        await _genericUser.Register(user);
-        await _genericUser.Commit();
+        await _customer.Register(user);
+        await _customer.Commit();
 
         return Ok("This user has been successfully registered."); 
       } catch(Exception ex) {
         _logger.LogError(ex.Message);
         return new StatusCodeResult(500);
-        throw;
       }
     }
 
@@ -90,14 +115,14 @@ namespace ApiPJ.Controllers.V1 {
       try {
 
         // query the database to see if the user is valid and then check if the result is null
-        var user = await _genericUser.GetUser(cpf);
+        var user = await _customer.GetUser(cpf);
         if(user == null) {
           return NotFound("The request was not completed. Apparent reason: Does not exist");
         }
 
         //if the user is valid, it is deleted and then the information is committed.
-        _genericUser.Delete(user);
-        await _genericUser.Commit();
+        _customer.Delete(user);
+        await _customer.Commit();
       } catch(Exception ex) {
         _logger.LogError(ex.Message);
         return new StatusCodeResult(500);
@@ -119,13 +144,13 @@ namespace ApiPJ.Controllers.V1 {
     [FilterValidState]
     public async Task<IActionResult> Update([FromRoute]string cpf, [FromBody]GenericUserUpdateInputModel userUpdate) {
       try {
-        var oldUser = await _genericUser.GetUser(cpf);
+        var oldUser = await _customer.GetUser(cpf);
         if(oldUser == null) {
           return NotFound("The request was not completed. Apparent reason: Does not exist");
         }
 
         //Definitely updates the user
-        var update = new GenericUser {
+        var update = new Customer {
           // Information is checked to identify if there has been a change. The change will only be applied if the update information is different from the old information
 
           // Ternary expressions for simple checking
@@ -148,8 +173,8 @@ namespace ApiPJ.Controllers.V1 {
           }
         };
 
-        await _genericUser.Update(update);
-        await _genericUser.Commit();
+        await _customer.Update(update);
+        await _customer.Commit();
 
         return Ok("User update completed successfully.");
       } catch(Exception ex) {
@@ -172,7 +197,7 @@ namespace ApiPJ.Controllers.V1 {
       try {
 
         // checks if the requested user is registered.
-        var user = await _genericUser.GetUser(cpf);
+        var user = await _customer.GetUser(cpf);
         if(user == null) {
           return NotFound("The request was not completed. Apparent reason: Does not exist");
         }
@@ -212,7 +237,7 @@ namespace ApiPJ.Controllers.V1 {
     [SwaggerResponse(statusCode: 200, description: "User located in database", Type = typeof(List<GenericUserOutputModel>))]
     public async Task<IActionResult> GetAllUser([FromRoute]int currentPage) {
       try {
-        var list = await _genericUser.GetAllUser(currentPage);
+        var list = await _customer.GetAllUser(currentPage);
         if(list == null) {
           return BadRequest("Oops. The request failed. Try again in a few minutes.");
         }

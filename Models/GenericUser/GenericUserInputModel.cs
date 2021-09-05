@@ -12,6 +12,10 @@ namespace ApiPJ.Models.GenericUser {
     * 
     * [EmailAddress] Informs that the e-mail field has a suitable training structure nome@provider.net/.com/
     * 
+    * [MaxLength()] Set maximum string size
+    * 
+    * [MinLenght()] Set minimum string size
+    * 
     */
   public class GenericUserInputModel {
     [StringLength(40)]

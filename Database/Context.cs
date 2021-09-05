@@ -11,11 +11,11 @@ namespace ApiPJ.Database {
   public class Context: DbContext {
     public Context(DbContextOptions<Context> options) : base(options) { }
 
-    public DbSet<GenericUser> GenericUserContext { get; set; }
-    public DbSet<FullAdress> fullAdresses { get; set; }
+    public DbSet<Customer> CustomerContext { get; set; }
+    public DbSet<FullAdress> FullAdressesContext { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder) {
-      builder.ApplyConfiguration(new GenericUserMapping());
+      builder.ApplyConfiguration(new CustomerMapping());
       builder.ApplyConfiguration(new FullAdressMapping());
       base.OnModelCreating(builder);
     }

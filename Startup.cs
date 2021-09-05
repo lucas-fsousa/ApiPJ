@@ -1,21 +1,19 @@
-using ApiPJ.Business.Repository.GenericUserDefinition;
 using ApiPJ.Database;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi.Models;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
+using System.Text;
+using Microsoft.IdentityModel.Tokens;
+using ApiPJ.Business.Repository.CustomerDefinition;
+using ApiPJ.Configurations.Security;
 
 namespace ApiPJ {
   public class Startup {
@@ -32,15 +30,49 @@ namespace ApiPJ {
         options.SuppressConsumesConstraintForFormFileParameters = true;
       });
       services.AddSwaggerGen(c => {
-        c.SwaggerDoc("v1", new OpenApiInfo { Title = "ApiPJ", Version = "v1" });
-
 
         // definition of the name of the XML file that contains the detailed information
         var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
         // Definition of the path where the file is located
         var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
         c.IncludeXmlComments(xmlPath);
+
+        c.SwaggerDoc("v1", new OpenApiInfo { Title = "ApiPJ", Version = "v1" });
+
+        // ============= START AUTHENTICATION CONFIGURATION BEARER =========
+        c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme {
+          Description = "JWT Authorization header using the Bearer scheme (Example: 'Bearer 12345abcdef')",
+          Name = "Authorization",
+          In = ParameterLocation.Header,
+          Type = SecuritySchemeType.ApiKey,
+          Scheme = "Bearer"
+        });
+        c.AddSecurityRequirement(new OpenApiSecurityRequirement {{ 
+          new OpenApiSecurityScheme {
+            Reference = new OpenApiReference {
+              Type = ReferenceType.SecurityScheme,
+              Id = "Bearer"
+            }
+          },
+          Array.Empty<string>()
+        }});
       });
+
+      var secretKey = Encoding.ASCII.GetBytes(Configuration.GetSection("JwtConfigurations:Secret").Value);
+      services.AddAuthentication(x => {
+        x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+      }).AddJwtBearer(x => {
+        x.RequireHttpsMetadata = false;
+        x.SaveToken = true;
+        x.TokenValidationParameters = new TokenValidationParameters { 
+          ValidateIssuerSigningKey = true,
+          IssuerSigningKey = new SymmetricSecurityKey(secretKey),
+          ValidateIssuer = false,
+          ValidateAudience = false
+        };
+      });
+      // ============= END AUTHENTICATION CONFIGURATION BEARER =========
 
 
       // Here is the connection string definition (appSettings.json) using SQLSERVER
@@ -50,7 +82,8 @@ namespace ApiPJ {
 
 
       // configuration of the design pattern where the class that will work for the requested interface is informed to startup example: <Interface, Model class>
-      services.AddScoped<IGenericUserRepository, GenericUserRepository>();
+      services.AddScoped<ICustomerRepository, CustomerRepository>();
+      services.AddScoped<IAuthenticationService, JwtTokenService>();
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -66,6 +99,7 @@ namespace ApiPJ {
       app.UseRouting();
 
       app.UseAuthorization();
+      app.UseAuthentication();
 
       app.UseEndpoints(endpoints => {
         endpoints.MapControllers();
