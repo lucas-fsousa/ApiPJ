@@ -41,7 +41,6 @@ namespace ApiPJ.Business.Repository.CustomerDefinition {
       var result = new List<Customer>();
       foreach(var item in generic) {
         Customer customer = item.user;
-        customer.Adress = item.adress;
         result.Add(customer);
       }
       return result;
@@ -50,14 +49,18 @@ namespace ApiPJ.Business.Repository.CustomerDefinition {
     // this method performs a search in the database looking for the CPF informed
     public async Task<Customer> GetUser(string cpf) {
       cpf = cpf.Trim();
-      var result = await _context.CustomerContext.FirstOrDefaultAsync(x => x.Cpf == cpf);
+      var customer = _context.CustomerContext;
+      var adress = _context.FullAdressesContext;
+
+      var generic = await customer.Select(x => x).Where(x => x.Cpf == cpf).Join(adress, customerTable => customerTable.Id, adressTable => adressTable.Id, (customerTable, adressTable) => new { customerTable, adressTable }).ToArrayAsync();
 
       // It guarantees that the search result will only be delivered if all entities are filled.
-      if(result != null) {
-        result.Adress = await _context.FullAdressesContext.FirstOrDefaultAsync(x => x.Id == result.Id);
-        result = result.Adress == null ? null : result; 
+      if(generic.Length == 0) {
+        return null;
       }
-      return result;
+
+      Customer returnedEmployee = generic[0].customerTable;
+      return returnedEmployee;
     }
 
     // this method checks if the user exists and returns the login ok

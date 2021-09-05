@@ -14,6 +14,7 @@ using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using ApiPJ.Business.Repository.CustomerDefinition;
 using ApiPJ.Configurations.Security;
+using ApiPJ.Business.Repository.EmployeeDefinition;
 
 namespace ApiPJ {
   public class Startup {
@@ -86,6 +87,7 @@ namespace ApiPJ {
 
       // configuration of the design pattern where the class that will work for the requested interface is informed to startup example: <Interface, Model class>
       services.AddScoped<ICustomerRepository, CustomerRepository>();
+      services.AddScoped<IEmployeeRepository, EmployeeRepository>();
       services.AddScoped<IAuthenticationService, JwtTokenService>();
     }
 

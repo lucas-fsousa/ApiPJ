@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ApiPJ.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20210905030751_newAtt")]
-    partial class newAtt
+    [Migration("20210905164643_Init1")]
+    partial class Init1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -76,6 +76,82 @@ namespace ApiPJ.Migrations
                     b.ToTable("TB_CUSTOMER");
                 });
 
+            modelBuilder.Entity("ApiPJ.Entities.Employee", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("AcessLevel")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("AdmissionDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("BirthDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("ContractualSalary")
+                        .HasPrecision(2)
+                        .HasColumnType("decimal(2,2)");
+
+                    b.Property<string>("Cpf")
+                        .IsRequired()
+                        .HasMaxLength(11)
+                        .HasColumnType("nvarchar(11)");
+
+                    b.Property<DateTime>("DemissionDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("FunctionName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MaritalStatus")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Rg")
+                        .IsRequired()
+                        .HasMaxLength(7)
+                        .HasColumnType("nvarchar(7)");
+
+                    b.Property<string>("Sex")
+                        .IsRequired()
+                        .HasMaxLength(60)
+                        .HasColumnType("nvarchar(60)");
+
+                    b.Property<string>("WalletWorkId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Cpf")
+                        .IsUnique();
+
+                    b.ToTable("TB_EMPLOYEE");
+                });
+
             modelBuilder.Entity("ApiPJ.Entities.FullAdress", b =>
                 {
                     b.Property<int>("Id")
@@ -104,6 +180,17 @@ namespace ApiPJ.Migrations
                 });
 
             modelBuilder.Entity("ApiPJ.Entities.Customer", b =>
+                {
+                    b.HasOne("ApiPJ.Entities.FullAdress", "Adress")
+                        .WithMany()
+                        .HasForeignKey("Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Adress");
+                });
+
+            modelBuilder.Entity("ApiPJ.Entities.Employee", b =>
                 {
                     b.HasOne("ApiPJ.Entities.FullAdress", "Adress")
                         .WithMany()

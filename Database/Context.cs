@@ -13,10 +13,12 @@ namespace ApiPJ.Database {
 
     public DbSet<Customer> CustomerContext { get; set; }
     public DbSet<FullAdress> FullAdressesContext { get; set; }
+    public DbSet<Employee> EmployeeContext { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder) {
       builder.ApplyConfiguration(new CustomerMapping());
       builder.ApplyConfiguration(new FullAdressMapping());
+      builder.ApplyConfiguration(new EmployeeMapping());
       base.OnModelCreating(builder);
     }
   }

@@ -12,6 +12,8 @@ namespace ApiPJ.Models.Employee {
   * [DataType(Dataype.**)] Inform the type of HTML input the field allows
   * 
   * [MaxLength()] Entityframework structure capable of setting the field size in the database
+  * 
+  * [Range()] Defines the range of desired values
   */
   public class EmployeeRegisterInputModel: GenericUserInputModel {
 
@@ -31,5 +33,9 @@ namespace ApiPJ.Models.Employee {
 
     [Required(ErrorMessage = "This field is strictly necessary. Fill in correctly.")]
     public float ContractualSalary { get; set; }
+
+    [Required(ErrorMessage = "This field is strictly necessary. Fill in correctly.")]
+    [Range(0, 10)]
+    public int AcessLevel { get; set; }
   }
 }

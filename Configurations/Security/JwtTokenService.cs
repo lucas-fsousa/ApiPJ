@@ -1,4 +1,5 @@
 ﻿using ApiPJ.Entities;
+using ApiPJ.Entities.Base;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -14,7 +15,7 @@ namespace ApiPJ.Configurations.Security {
     }
 
     // This method is responsible for generating an authentication token for the user to remain active on the platform
-    public string GenerateToken(Customer inputModel) {
+    public string GenerateToken(GenericUserBase inputModel) {
       var secret = Encoding.ASCII.GetBytes(_configuration.GetSection("JwtConfigurations:Secret").Value);
       var symmetricSecurityKey = new SymmetricSecurityKey(secret);
       var securityTokenDescriptor = new SecurityTokenDescriptor {

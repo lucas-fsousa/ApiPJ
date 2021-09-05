@@ -281,7 +281,5 @@ namespace ApiPJ.Controllers.V1 {
         return new StatusCodeResult(500);
       }
     }
-
-
   }
 }
