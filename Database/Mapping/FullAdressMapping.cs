@@ -10,7 +10,7 @@ namespace ApiPJ.Database.Mapping {
   public class FullAdressMapping: IEntityTypeConfiguration<FullAdress> {
     public void Configure(EntityTypeBuilder<FullAdress> builder) {
       builder.ToTable("TB_ADRESS");
-      builder.Property(x => x.Id).IsRequired();
+      builder.HasKey(x => x.IdAdress);
       builder.Property(x => x.PublicPlace).IsRequired().HasMaxLength(100);
       builder.Property(x => x.Reference).IsRequired().HasMaxLength(100);
       builder.Property(x => x.Street).IsRequired().HasMaxLength(100);

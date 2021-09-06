@@ -34,8 +34,8 @@ namespace ApiPJ.Business.Repository.CustomerDefinition {
 
       // Sql query to make a select on two tables and return a list with 10 results.
       var generic = await adressContext.Skip((currentPage - 1) * itemsPerPage).Take(itemsPerPage)
-        .Select(x => x).Join(customerContext, user => user.Id, adress => adress.Id, (adress, user) => new { adress, user })
-        .Where(x => x.adress.Id == x.user.Id).ToListAsync();
+        .Select(x => x).Join(customerContext, adress => adress.IdAdress, user => user.Id, (adress, user) => new { adress, user })
+        .Where(x => x.adress.IdAdress == x.user.Id).ToListAsync();
 
       // Filling in the objects related to the executed sql query
       var result = new List<Customer>();
@@ -52,7 +52,7 @@ namespace ApiPJ.Business.Repository.CustomerDefinition {
       var customer = _context.CustomerContext;
       var adress = _context.FullAdressesContext;
 
-      var generic = await customer.Select(x => x).Where(x => x.Cpf == cpf).Join(adress, customerTable => customerTable.Id, adressTable => adressTable.Id, (customerTable, adressTable) => new { customerTable, adressTable }).ToArrayAsync();
+      var generic = await customer.Select(x => x).Where(x => x.Cpf == cpf).Join(adress, customerTable => customerTable.Id, adressTable => adressTable.IdAdress, (customerTable, adressTable) => new { customerTable, adressTable }).ToArrayAsync();
 
       // It guarantees that the search result will only be delivered if all entities are filled.
       if(generic.Length == 0) {

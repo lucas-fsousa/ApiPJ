@@ -18,13 +18,13 @@ namespace ApiPJ.Database.Mapping {
       builder.Property(u => u.BirthDate).IsRequired();
       builder.Property(u => u.PhoneNumber).IsRequired();
       builder.Property(u => u.MaritalStatus).IsRequired();
-      builder.HasOne(u => u.Adress).WithMany().HasForeignKey(fk => fk.Id);
+      builder.HasOne(u => u.Adress).WithMany().HasForeignKey(x => x.Id);
 
       builder.Property(u => u.AdmissionDate).IsRequired();
       builder.Property(u => u.DemissionDate);
       builder.Property(u => u.FunctionName).IsRequired();
       builder.Property(u => u.WalletWorkId).IsRequired();
-      builder.Property(u => u.ContractualSalary).IsRequired().HasPrecision(2);
+      builder.Property(u => u.ContractualSalary).IsRequired().HasPrecision(18,2);
       builder.Property(u => u.AcessLevel).IsRequired();
       builder.Property(u => u.Active).IsRequired();
     }

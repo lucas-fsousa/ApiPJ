@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ApiPJ.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20210905190845_Init1")]
+    [Migration("20210906030230_Init1")]
     partial class Init1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -20,6 +20,63 @@ namespace ApiPJ.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.9")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("ApiPJ.Entities.Apartment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<bool>("Available")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("Bedrooms")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("BlackoutDatesId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("MaximumPeoples")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ParkingLots")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BlackoutDatesId");
+
+                    b.ToTable("TB_APARTMENT");
+                });
+
+            modelBuilder.Entity("ApiPJ.Entities.BlackoutDate", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("FinalDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("InitialDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TB_BLACKOUTDATES");
+                });
 
             modelBuilder.Entity("ApiPJ.Entities.Customer", b =>
                 {
@@ -157,7 +214,7 @@ namespace ApiPJ.Migrations
 
             modelBuilder.Entity("ApiPJ.Entities.FullAdress", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("IdAdress")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -177,9 +234,26 @@ namespace ApiPJ.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.HasKey("Id");
+                    b.HasKey("IdAdress");
 
                     b.ToTable("TB_ADRESS");
+                });
+
+            modelBuilder.Entity("ApiPJ.Entities.Apartment", b =>
+                {
+                    b.HasOne("ApiPJ.Entities.BlackoutDate", "BlackoutDates")
+                        .WithMany()
+                        .HasForeignKey("BlackoutDatesId");
+
+                    b.HasOne("ApiPJ.Entities.FullAdress", "Adress")
+                        .WithMany()
+                        .HasForeignKey("Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Adress");
+
+                    b.Navigation("BlackoutDates");
                 });
 
             modelBuilder.Entity("ApiPJ.Entities.Customer", b =>

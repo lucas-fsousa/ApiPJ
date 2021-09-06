@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace ApiPJ.Entities.Base {
   public abstract class GenericUserBase {

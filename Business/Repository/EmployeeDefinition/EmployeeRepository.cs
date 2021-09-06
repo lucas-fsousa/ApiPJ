@@ -30,8 +30,8 @@ namespace ApiPJ.Business.Repository.EmployeeDefinition {
 
       // Sql query to make a select on two tables and return a list with 10 results.
       var generic = await adressContext.Skip((currentPage - 1) * itemsPerPage).Take(itemsPerPage)
-        .Select(x => x).Join(employeerContext, user => user.Id, adress => adress.Id, (adress, user) => new { adress, user })
-        .Where(x => x.adress.Id == x.user.Id).ToListAsync();
+        .Select(x => x).Join(employeerContext, adress => adress.IdAdress, user => user.Id, (adress, user) => new { adress, user })
+        .Where(x => x.adress.IdAdress == x.user.Id).ToListAsync();
 
       // Filling in the objects related to the executed sql query
       var result = new List<Employee>();
@@ -48,7 +48,7 @@ namespace ApiPJ.Business.Repository.EmployeeDefinition {
       var employee = _context.EmployeeContext;
       var adress = _context.FullAdressesContext;
 
-      var generic = await employee.Select(x => x).Where(x => x.Cpf == cpf).Join(adress, employeeTable => employeeTable.Id, adressTable => adressTable.Id, (employeeTable, adressTable) => new { employeeTable, adressTable }).ToArrayAsync();
+      var generic = await employee.Select(x => x).Where(x => x.Cpf == cpf).Join(adress, employeeTable => employeeTable.Id, adressTable => adressTable.IdAdress, (employeeTable, adressTable) => new { employeeTable, adressTable }).ToArrayAsync();
 
       // It guarantees that the search result will only be delivered if all entities are filled.
       if(generic.Length == 0) {

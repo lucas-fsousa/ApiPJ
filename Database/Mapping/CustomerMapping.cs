@@ -18,7 +18,7 @@ namespace ApiPJ.Database.Mapping {
       builder.Property(u => u.BirthDate).IsRequired();
       builder.Property(u => u.PhoneNumber).IsRequired();
       builder.Property(u => u.MaritalStatus).IsRequired();
-      builder.HasOne(u => u.Adress).WithMany().HasForeignKey(fk => fk.Id);
+      builder.HasOne(u => u.Adress).WithMany().HasForeignKey(x => x.Id);
     }
   }
 }
