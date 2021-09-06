@@ -33,17 +33,13 @@ namespace ApiPJ.Controllers.V1 {
     /// </summary>
     /// <param name="credentials"></param>
     /// <returns>May return Ok(code 200), BadRequest(code 400) or internal error(code 500)</returns>
-    [SwaggerResponse(statusCode: 200, description: "The request was successfully completed.")]
+    [SwaggerResponse(statusCode: 200, description: "The request was successfully completed.", Type = typeof(LoginOutputViewModel))]
     [SwaggerResponse(statusCode: 400, description: "The request was invalid. Check the parameters and try again.")]
     [SwaggerResponse(statusCode: 500, description: "The request was not completed due to an internal error on the server side.")]
     [FilterValidState]
     [HttpPost, Route("login")]
     public async Task<IActionResult> LogIn(LoginInputViewModel credentials) {
       try {
-
-        // The password is encrypted with a concatenation of the password entered with the unique cpf
-        credentials.Password = (credentials.Password + credentials.Cpf).EncodePassword().Trim();
-
         var result = await _employee.LogIn(credentials);
         if(result == null) {
           return BadRequest();
@@ -91,6 +87,7 @@ namespace ApiPJ.Controllers.V1 {
           PhoneNumber = registerInputModel.PhoneNumber,
           Rg = registerInputModel.Rg,
           Sex = registerInputModel.Sex,
+          Password = registerInputModel.Password,
 
           AcessLevel = registerInputModel.AcessLevel,
           AdmissionDate = registerInputModel.AdmissionDate,
@@ -99,10 +96,6 @@ namespace ApiPJ.Controllers.V1 {
           WalletWorkId = registerInputModel.WalletWorkId,
           DemissionDate = DateTime.Now.AddYears(99),
           Active = true,
-          
-
-          //To ensure that the password has a unique HASH, two strings are concatenated, the CPF identifier and the password itself defined by the user
-          Password = $"{registerInputModel.Password + registerInputModel.Cpf}".EncodePassword(),
 
           Adress = new FullAdress {
             PublicPlace = registerInputModel.Adress.PublicPlace,
@@ -194,7 +187,7 @@ namespace ApiPJ.Controllers.V1 {
           Cpf = cpf,
           
           //To ensure that the password has a unique HASH, two strings are concatenated, the CPF identifier and the password itself defined by the user
-          Password = $"{userUpdate.Password + cpf}".EncodePassword() == oldUser.Password ? oldUser.Password : $"{userUpdate.Password + cpf}".EncodePassword(),
+          Password = $"{userUpdate.Password + cpf}".Trim().EncodePassword() == oldUser.Password ? oldUser.Password : $"{userUpdate.Password + cpf}".Trim().EncodePassword(),
 
           Adress = new FullAdress {
             PublicPlace = userUpdate.Adress.PublicPlace == oldUser.Adress.PublicPlace ? oldUser.Adress.PublicPlace : userUpdate.Adress.PublicPlace,

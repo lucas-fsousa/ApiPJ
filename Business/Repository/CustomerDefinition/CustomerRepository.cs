@@ -1,6 +1,7 @@
 ﻿using ApiPJ.Database;
 using ApiPJ.Entities;
 using ApiPJ.Models.Login;
+using Business.Methods;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
@@ -49,6 +50,10 @@ namespace ApiPJ.Business.Repository.CustomerDefinition {
     // this method performs a search in the database looking for the CPF informed
     public async Task<Customer> GetUser(string cpf) {
       cpf = cpf.Trim();
+      if(cpf.ValidateCPF()) {
+        return null;
+      }
+      
       var customer = _context.CustomerContext;
       var adress = _context.FullAdressesContext;
 
@@ -65,11 +70,16 @@ namespace ApiPJ.Business.Repository.CustomerDefinition {
 
     // this method checks if the user exists and returns the login ok
     public async Task<Customer> LogIn(LoginInputViewModel loginInput) {
+      loginInput.Password = (loginInput.Password + loginInput.Cpf).Trim().EncodePassword();
       return await _context.CustomerContext.FirstOrDefaultAsync(x => x.Password == loginInput.Password && x.Cpf == loginInput.Cpf);
     }
 
     // this method add a new user to the database
     public async Task Register(Customer customer) {
+      if(customer.Cpf.ValidateCPF()) {
+        return;
+      }
+      customer.Password = (customer.Password + customer.Cpf).Trim().EncodePassword();
       await _context.CustomerContext.AddAsync(customer);
     }
 

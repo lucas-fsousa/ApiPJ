@@ -1,7 +1,9 @@
 ﻿using ApiPJ.Database;
 using ApiPJ.Entities;
 using ApiPJ.Models.Login;
+using Business.Methods;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -44,7 +46,9 @@ namespace ApiPJ.Business.Repository.EmployeeDefinition {
 
     // this method performs a search in the database looking for the CPF informed
     public async Task<Employee> GetEmployee(string cpf) {
-      cpf = cpf.Trim();
+      if(cpf.ValidateCPF()) {
+        return null;
+      }
       var employee = _context.EmployeeContext;
       var adress = _context.FullAdressesContext;
 
@@ -61,16 +65,22 @@ namespace ApiPJ.Business.Repository.EmployeeDefinition {
 
     // method to confirm the existence of the user, returns the user.
     public async Task<Employee> LogIn(LoginInputViewModel loginInput) {
+      loginInput.Password = (loginInput.Password + loginInput.Cpf).Trim().EncodePassword();
       return await _context.EmployeeContext.FirstOrDefaultAsync(x => x.Password == loginInput.Password && x.Cpf == loginInput.Cpf);
     }
 
     // method responsible for registering user
     public async Task Register(Employee employee) {
+      if(employee.Cpf.ValidateCPF()) {
+        return;
+      }
+      employee.Password = (employee.Password + employee.Cpf).Trim().EncodePassword();
       await _context.EmployeeContext.AddAsync(employee);
     }
 
     // this method is able to update the data contained in the database according to user input.
     public async Task Update(Employee employee) {
+
       await _context.EmployeeContext.Where(x => x.Cpf == employee.Cpf).ForEachAsync(x => {
         x.Adress.PublicPlace = employee.Adress.PublicPlace;
         x.Adress.Reference = employee.Adress.Reference;
