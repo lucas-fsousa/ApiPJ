@@ -12,6 +12,6 @@ namespace ApiPJ.Entities {
     public bool Available { get; set; }
     public decimal Price { get; set; }
 
-    public List<BlackoutDate> ListaEnumerable { get; set; }
+    public List<BlackoutDate> DatesNotAvailable { get; set; }
   }
 }

@@ -4,6 +4,41 @@
         <name>ApiPJ</name>
     </assembly>
     <members>
+        <member name="M:ApiPJ.Controllers.V1.ApartmentController.Register(ApiPJ.Models.Apartments.ApartmentInputModel)">
+            <summary>
+            can create a new "apartment" item
+            </summary>
+            <param name="inputModel"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ApiPJ.Controllers.V1.ApartmentController.GetApartments">
+            <summary>
+            Returns a list with all apartments and their availability.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:ApiPJ.Controllers.V1.ApartmentController.Delete(System.Int32)">
+            <summary>
+            Deletes an apartment based on the name entered.
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ApiPJ.Controllers.V1.ApartmentController.GetApartment(System.Int32)">
+            <summary>
+            Returns a single apartment and their availability.
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ApiPJ.Controllers.V1.ApartmentController.Update(System.Int32,ApiPJ.Models.Apartments.ApartmentUpdateInputmodel)">
+            <summary>
+            Update an apartment based on the entered identifier and entity to be updated
+            </summary>
+            <param name="id"></param>
+            <param name="apartment"></param>
+            <returns></returns>
+        </member>
         <member name="M:ApiPJ.Controllers.V1.CustomerController.LogIn(ApiPJ.Models.Login.LoginInputViewModel)">
             <summary>
             Authenticates the user according to the credentials entered.

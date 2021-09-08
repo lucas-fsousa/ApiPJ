@@ -50,7 +50,7 @@ namespace ApiPJ.Business.Repository.CustomerDefinition {
     // this method performs a search in the database looking for the CPF informed
     public async Task<Customer> GetUser(string cpf) {
       cpf = cpf.Trim();
-      if(cpf.ValidateCPF()) {
+      if(!cpf.ValidateCPF()) {
         return null;
       }
       
@@ -76,7 +76,7 @@ namespace ApiPJ.Business.Repository.CustomerDefinition {
 
     // this method add a new user to the database
     public async Task Register(Customer customer) {
-      if(customer.Cpf.ValidateCPF()) {
+      if(!customer.Cpf.ValidateCPF()) {
         return;
       }
       customer.Password = (customer.Password + customer.Cpf).Trim().EncodePassword();

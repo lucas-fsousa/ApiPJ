@@ -46,7 +46,8 @@ namespace ApiPJ.Business.Repository.EmployeeDefinition {
 
     // this method performs a search in the database looking for the CPF informed
     public async Task<Employee> GetEmployee(string cpf) {
-      if(cpf.ValidateCPF()) {
+      cpf = cpf.Trim();
+      if(!cpf.ValidateCPF()) {
         return null;
       }
       var employee = _context.EmployeeContext;
@@ -71,7 +72,7 @@ namespace ApiPJ.Business.Repository.EmployeeDefinition {
 
     // method responsible for registering user
     public async Task Register(Employee employee) {
-      if(employee.Cpf.ValidateCPF()) {
+      if(!employee.Cpf.ValidateCPF()) {
         return;
       }
       employee.Password = (employee.Password + employee.Cpf).Trim().EncodePassword();

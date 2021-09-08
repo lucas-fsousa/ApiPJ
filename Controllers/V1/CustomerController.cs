@@ -76,6 +76,10 @@ namespace ApiPJ.Controllers.V1 {
           return BadRequest("This user cannot be registered. Reasons: Exists, is locked or is invalid.");
         }
 
+        if(!registerInputModel.Cpf.ValidateCPF()) {
+          return BadRequest("Invalid CPF.");
+        }
+
         //Definitely creates the user
         user = new Customer {
           BirthDate = registerInputModel.BirthDate,
