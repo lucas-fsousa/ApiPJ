@@ -1,13 +1,10 @@
 ﻿using ApiPJ.Business.Repository.ApartmentDefinition;
 using ApiPJ.Entities;
 using ApiPJ.Models.Apartments;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
+using ApiPJ.Models.BlackoutDates;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace ApiPJ.Controllers.V1 {
@@ -26,11 +23,10 @@ namespace ApiPJ.Controllers.V1 {
     [HttpPost, Route("register")]
     public async Task<IActionResult> Register(ApartmentInputModel inputModel) {
       try {
-        var a = new Apartment {
-          Adress = inputModel.Adress,
+        var apartment = new Apartment {
+          Localization = inputModel.Localization,
           Available = true,
           Bedrooms = inputModel.Bedrooms,
-          BlackoutDates = null,
           City = inputModel.City,
           Description = inputModel.Description,
           MaximumPeoples = inputModel.MaximumPeoples,
@@ -38,7 +34,7 @@ namespace ApiPJ.Controllers.V1 {
           Price = inputModel.Price
         };
 
-        await _apartment.Register(a);
+        await _apartment.Register(apartment);
         await _apartment.Commit();
 
         return Ok();
@@ -47,5 +43,25 @@ namespace ApiPJ.Controllers.V1 {
         return new StatusCodeResult(500);
       }
     }
+
+    
+
+
+    [HttpGet, Route("getApartments")]
+    public async Task<IActionResult> GetApartments() {
+      try {
+
+        var result = await _apartment.GetApartments();
+        return Ok(result);
+      } catch(Exception ex) {
+        string a = " " + ex;
+      }
+      return BadRequest();
+    }
+
+
+
+
+
   }
 }

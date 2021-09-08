@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ApiPJ.Migrations
 {
-    public partial class Init1 : Migration
+    public partial class init4 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -23,17 +23,38 @@ namespace ApiPJ.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "TB_BLACKOUTDATES",
+                name: "TB_APARTMENT",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    Bedrooms = table.Column<int>(type: "int", nullable: false),
+                    ParkingLots = table.Column<int>(type: "int", nullable: false),
+                    MaximumPeoples = table.Column<int>(type: "int", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Localization = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    City = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Available = table.Column<bool>(type: "bit", nullable: false),
+                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TB_APARTMENT", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "TB_BLACKOUTDATE",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ApartmentId = table.Column<int>(type: "int", nullable: false),
                     InitialDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     FinalDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_TB_BLACKOUTDATES", x => x.Id);
+                    table.PrimaryKey("PK_TB_BLACKOUTDATE", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -71,7 +92,7 @@ namespace ApiPJ.Migrations
                     DemissionDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     WalletWorkId = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     FunctionName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ContractualSalary = table.Column<decimal>(type: "decimal(2,2)", precision: 2, nullable: false),
+                    ContractualSalary = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
                     AcessLevel = table.Column<int>(type: "int", nullable: false),
                     Active = table.Column<bool>(type: "bit", nullable: false),
                     MaritalStatus = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -95,42 +116,6 @@ namespace ApiPJ.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "TB_APARTMENT",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false),
-                    Bedrooms = table.Column<int>(type: "int", nullable: false),
-                    ParkingLots = table.Column<int>(type: "int", nullable: false),
-                    MaximumPeoples = table.Column<int>(type: "int", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    City = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Available = table.Column<bool>(type: "bit", nullable: false),
-                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    BlackoutDatesId = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_TB_APARTMENT", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_TB_APARTMENT_TB_ADRESS_Id",
-                        column: x => x.Id,
-                        principalTable: "TB_ADRESS",
-                        principalColumn: "IdAdress",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_TB_APARTMENT_TB_BLACKOUTDATES_BlackoutDatesId",
-                        column: x => x.BlackoutDatesId,
-                        principalTable: "TB_BLACKOUTDATES",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_TB_APARTMENT_BlackoutDatesId",
-                table: "TB_APARTMENT",
-                column: "BlackoutDatesId");
-
             migrationBuilder.CreateIndex(
                 name: "IX_TB_CUSTOMER_Cpf",
                 table: "TB_CUSTOMER",
@@ -150,13 +135,13 @@ namespace ApiPJ.Migrations
                 name: "TB_APARTMENT");
 
             migrationBuilder.DropTable(
+                name: "TB_BLACKOUTDATE");
+
+            migrationBuilder.DropTable(
                 name: "TB_CUSTOMER");
 
             migrationBuilder.DropTable(
                 name: "TB_EMPLOYEE");
-
-            migrationBuilder.DropTable(
-                name: "TB_BLACKOUTDATES");
 
             migrationBuilder.DropTable(
                 name: "TB_ADRESS");

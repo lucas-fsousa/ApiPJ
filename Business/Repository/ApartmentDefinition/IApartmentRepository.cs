@@ -1,4 +1,5 @@
 ﻿using ApiPJ.Entities;
+using ApiPJ.Models.BlackoutDates;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,5 +10,7 @@ namespace ApiPJ.Business.Repository.ApartmentDefinition {
     public Task Commit();
 
     public Task Register(Apartment apartment);
+
+    public Task<List<Apartment>> GetApartments();
   }
 }

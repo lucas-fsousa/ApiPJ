@@ -41,6 +41,6 @@ namespace ApiPJ.Models.Apartments {
     public decimal Price { get; set; }
 
     [Required(ErrorMessage = "This field is strictly necessary. Fill in correctly.")]
-    public FullAdress Adress { get; set; }
+    public string Localization { get; set; }
   }
 }
