@@ -41,7 +41,7 @@ namespace ApiPJ.Models.Apartments {
 
     [Required(ErrorMessage = "This field is strictly necessary. Fill in correctly.")]
     [DataType(DataType.Currency)]
-    public decimal Price { get; set; }
+    public decimal DailyPrice { get; set; }
 
     [Required(ErrorMessage = "This field is strictly necessary. Fill in correctly.")]
     public string Localization { get; set; }

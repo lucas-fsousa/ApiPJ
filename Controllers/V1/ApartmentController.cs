@@ -2,7 +2,6 @@
 using ApiPJ.Business.Repository.ApartmentDefinition;
 using ApiPJ.Entities;
 using ApiPJ.Models.Apartments;
-using ApiPJ.Models.BlackoutDates;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -28,7 +27,7 @@ namespace ApiPJ.Controllers.V1 {
     /// </summary>
     /// <param name="inputModel"></param>
     /// <returns></returns>
-    [Authorize]
+    //[Authorize]
     [HttpPost, Route("register")]
     [SwaggerResponse(statusCode: 401, description: "The request did not include an authentication token or the authentication token was expired.")]
     [SwaggerResponse(statusCode: 200, description: "The request was successfully completed.", Type = typeof(Apartment))]
@@ -45,7 +44,7 @@ namespace ApiPJ.Controllers.V1 {
           Description = inputModel.Description,
           MaximumPeoples = inputModel.MaximumPeoples,
           ParkingLots = inputModel.ParkingLots,
-          Price = inputModel.Price
+          DailyPrice = inputModel.DailyPrice
         };
 
         await _apartment.Register(apartment);
@@ -64,7 +63,7 @@ namespace ApiPJ.Controllers.V1 {
     /// Returns a list with all apartments and their availability.
     /// </summary>
     /// <returns></returns>
-    [Authorize]
+    //[Authorize]
     [HttpGet, Route("getApartments")]
     [SwaggerResponse(statusCode: 401, description: "The request did not include an authentication token or the authentication token was expired.")]
     [SwaggerResponse(statusCode: 200, description: "The request was successfully completed.", Type = typeof(List<Apartment>))]
@@ -84,7 +83,7 @@ namespace ApiPJ.Controllers.V1 {
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
-    [Authorize]
+    //[Authorize]
     [HttpDelete, Route("delete/{id}")]
     [SwaggerResponse(statusCode: 401, description: "The request did not include an authentication token or the authentication token was expired.")]
     [SwaggerResponse(statusCode: 200, description: "The request was successfully completed.")]
@@ -110,7 +109,7 @@ namespace ApiPJ.Controllers.V1 {
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
-    [Authorize]
+    //[Authorize]
     [HttpGet, Route("getApartment/{id}")]
     [SwaggerResponse(statusCode: 401, description: "The request did not include an authentication token or the authentication token was expired.")]
     [SwaggerResponse(statusCode: 200, description: "The request was successfully completed.", Type = typeof(Apartment))]
@@ -135,11 +134,12 @@ namespace ApiPJ.Controllers.V1 {
     /// <param name="id"></param>
     /// <param name="apartment"></param>
     /// <returns></returns>
-    [Authorize]
+    //[Authorize]
     [HttpPut, Route("update")]
     [SwaggerResponse(statusCode: 401, description: "The request did not include an authentication token or the authentication token was expired.")]
     [SwaggerResponse(statusCode: 200, description: "The request was successfully completed.")]
     [SwaggerResponse(statusCode: 500, description: "The request was not completed due to an internal error on the server side.")]
+    [FilterValidState]
     public async Task<IActionResult> Update(int id, ApartmentUpdateInputmodel apartment) {
       try {
         var oldApartment = await _apartment.GetApartment(id);
@@ -150,7 +150,7 @@ namespace ApiPJ.Controllers.V1 {
           ParkingLots = apartment.ParkingLots == oldApartment.ParkingLots ? oldApartment.ParkingLots : apartment.ParkingLots,
           Available = apartment.Available == oldApartment.Available ? oldApartment.Available : apartment.Available,
           Bedrooms = apartment.Bedrooms == oldApartment.Bedrooms ? oldApartment.Bedrooms : apartment.Bedrooms,
-          Price = apartment.Price == oldApartment.Price ? oldApartment.Price : apartment.Price,
+          DailyPrice = apartment.DailyPrice == oldApartment.DailyPrice ? oldApartment.DailyPrice : apartment.DailyPrice,
           City = apartment.City == oldApartment.City ? oldApartment.City : apartment.City,
           Id = id
         };

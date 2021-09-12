@@ -125,5 +125,48 @@
             <param name="currentPage"></param>
             <returns>May return Ok(code 200), Unauthorized(code 401), badRequest(code 400) or internal error(code 500)</returns>
         </member>
+        <member name="M:ApiPJ.Controllers.V1.ReserveController.GetReserves(System.Int32)">
+            <summary>
+            Returns a list of paged reservations with 10 results per page
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:ApiPJ.Controllers.V1.ReserveController.GetReservesByCpf(System.Int32,System.String)">
+            <summary>
+             returns a paged reserve list with up to 10 records per page based on the CPF of the entered user
+            </summary>
+            <param name="CurrentPage"></param>
+            <param name="customerCpf"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ApiPJ.Controllers.V1.ReserveController.GetReserve(System.Int32)">
+            <summary>
+            Returns a reservation based on the given identifier
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ApiPJ.Controllers.V1.ReserveController.Register(ApiPJ.Models.Reserve.ReserveInputModel)">
+            <summary>
+            add a new apartment reservation
+            </summary>
+            <param name="inputModel"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ApiPJ.Controllers.V1.ReserveController.UpdateReserve(System.Int32,ApiPJ.Models.Reserve.ReserveUpdateInputModel)">
+            <summary>
+            Updates the information of an existing reservation based on new data entries
+            </summary>
+            <param name="id"></param>
+            <param name="inputModel"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ApiPJ.Controllers.V1.ReserveController.DeleteReserve(System.Int32)">
+            <summary>
+            Delete an existing reservation based on the entered identifier
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
     </members>
 </doc>

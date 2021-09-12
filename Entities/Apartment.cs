@@ -10,8 +10,8 @@ namespace ApiPJ.Entities {
     public string Localization { get; set; }
     public string City { get; set; }
     public bool Available { get; set; }
-    public decimal Price { get; set; }
+    public decimal DailyPrice { get; set; }
 
-    public List<BlackoutDate> DatesNotAvailable { get; set; }
+    public List<Reserve> Reserves { get; set; }
   }
 }

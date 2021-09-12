@@ -12,11 +12,11 @@ namespace ApiPJ.Database.Mapping {
       builder.Property(x => x.ParkingLots).IsRequired();
       builder.Property(x => x.Available).IsRequired();
       builder.Property(x => x.Bedrooms).IsRequired();
-      builder.Property(x => x.Price).IsRequired();
+      builder.Property(x => x.DailyPrice).IsRequired();
       builder.Property(x => x.City).IsRequired();
       builder.Property(x => x.Id).UseIdentityColumn();
 
-      builder.Ignore(x => x.DatesNotAvailable);
+      builder.Ignore(x => x.Reserves);
     }
   }
 }

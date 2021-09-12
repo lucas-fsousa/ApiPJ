@@ -1,6 +1,5 @@
 ﻿using ApiPJ.Database;
 using ApiPJ.Entities;
-using ApiPJ.Models.BlackoutDates;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -24,19 +23,19 @@ namespace ApiPJ.Business.Repository.ApartmentDefinition {
 
     public async Task<List<Apartment>> GetApartments() {
       var listApartment = _context.ApartmentContext.Select(x => x).ToList();
-      var listBlackoutDate = _context.BlackoutDatesContext.Select(x => x).ToList();
+      var listReserve = _context.ReserveContext.Select(x => x).ToList();
       var list = new List<Apartment>();
 
       foreach(var apartment in listApartment) {
-        var ls = new List<BlackoutDate>();
-        foreach(var blackoutDate in listBlackoutDate) {
-          if(apartment.Id == blackoutDate.ApartmentId) {
-            ls.Add(blackoutDate);
+        var allReserves = new List<Reserve>();
+        foreach(var reserve in listReserve) {
+          if(apartment.Id == reserve.IdApartment) {
+            allReserves.Add(reserve);
           }
         }
-        Apartment add = apartment;
-        add.DatesNotAvailable = ls;
-        list.Add(add);
+        Apartment apartmentFound = apartment;
+        apartmentFound.Reserves = allReserves;
+        list.Add(apartmentFound);
 
       }
       return list;
@@ -47,14 +46,14 @@ namespace ApiPJ.Business.Repository.ApartmentDefinition {
       if(result == null) {
         return null;
       }
-      result.DatesNotAvailable = _context.BlackoutDatesContext.Select(x => x).Where(x => x.ApartmentId == id).ToList();
+      result.Reserves = _context.ReserveContext.Select(x => x).Where(x => x.IdApartment == id).ToList();
       return result;
     }
 
     public void Delete(Apartment apartment) {
-      var listBlackoutDates = _context.BlackoutDatesContext.Select(x => x).Where(x => x.ApartmentId == apartment.Id).ToList();
+      var listBlackoutDates = _context.ReserveContext.Select(x => x).Where(x => x.IdApartment == apartment.Id).ToList();
       foreach(var itemForDelet in listBlackoutDates) {
-        _context.BlackoutDatesContext.Remove(itemForDelet);
+        _context.ReserveContext.Remove(itemForDelet);
       }
       _context.ApartmentContext.Remove(apartment);
     }
@@ -67,7 +66,7 @@ namespace ApiPJ.Business.Repository.ApartmentDefinition {
         x.ParkingLots = apartment.ParkingLots;
         x.Available = apartment.Available;
         x.Bedrooms = apartment.Bedrooms;
-        x.Price = apartment.Price;
+        x.DailyPrice = apartment.DailyPrice;
         x.City = apartment.City;
       });
     }

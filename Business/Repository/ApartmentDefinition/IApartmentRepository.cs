@@ -1,5 +1,4 @@
 ﻿using ApiPJ.Entities;
-using ApiPJ.Models.BlackoutDates;
 using System;
 using System.Collections.Generic;
 using System.Linq;
