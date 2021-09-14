@@ -11,6 +11,7 @@ namespace ApiPJ.Database {
     public DbSet<Employee> EmployeeContext { get; set; }
     public DbSet<Apartment> ApartmentContext { get; set; }
     public DbSet<Reserve> ReserveContext { get; set; }
+    public DbSet<ImagePath> ImagePathContext { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder) {
       builder.ApplyConfiguration(new CustomerMapping());
@@ -18,6 +19,7 @@ namespace ApiPJ.Database {
       builder.ApplyConfiguration(new EmployeeMapping());
       builder.ApplyConfiguration(new ApartmentMapping());
       builder.ApplyConfiguration(new ReserveMapping());
+      builder.ApplyConfiguration(new ImagePathsMapping());
       base.OnModelCreating(builder);
     }
   }

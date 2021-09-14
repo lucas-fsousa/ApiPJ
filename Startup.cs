@@ -17,6 +17,7 @@ using ApiPJ.Configurations.Security;
 using ApiPJ.Business.Repository.EmployeeDefinition;
 using ApiPJ.Business.Repository.ApartmentDefinition;
 using ApiPJ.Business.Repository.ReserveDefintion;
+using ApiPJ.Business.Repository.ApartmentImageDefinition;
 
 namespace ApiPJ {
   public class Startup {
@@ -91,6 +92,7 @@ namespace ApiPJ {
       services.AddScoped<ICustomerRepository, CustomerRepository>();
       services.AddScoped<IEmployeeRepository, EmployeeRepository>();
       services.AddScoped<IReserveRepository, ReserveRepository>();
+      services.AddScoped<IApartmentImageRepository, ApartmentImageRepository>();
       services.AddScoped<IApartmentRepository, ApartmentRepository>();
       services.AddScoped<IAuthenticationService, JwtTokenService>();
     }

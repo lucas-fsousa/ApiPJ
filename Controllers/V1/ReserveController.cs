@@ -14,18 +14,16 @@ using System.Threading.Tasks;
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace ApiPJ.Controllers.V1 {
-  [Route("api/[controller]")]
+  [Route("api/v1/[controller]")]
   [ApiController]
   public class ReserveController : ControllerBase {
 
     private readonly IApartmentRepository _apartmentRepository;
-    private readonly ICustomerRepository _customerRepository;
     private readonly IReserveRepository _reserveRepository;
     private readonly ILogger<ReserveController> _logger;
-    public ReserveController(IReserveRepository repository, ILogger<ReserveController> logger, ICustomerRepository customerRepository, IApartmentRepository apartmentRepository) {
+    public ReserveController(IReserveRepository repository, ILogger<ReserveController> logger, IApartmentRepository apartmentRepository) {
       _reserveRepository = repository;
       _logger = logger;
-      _customerRepository = customerRepository;
       _apartmentRepository = apartmentRepository;
     }
 

@@ -21,4 +21,9 @@
     <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="5.6.3" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Images\" />
+    <Folder Include="Models\ImagePath\" />
+  </ItemGroup>
+
 </Project>

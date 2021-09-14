@@ -17,6 +17,7 @@ namespace ApiPJ.Database.Mapping {
       builder.Property(x => x.Id).UseIdentityColumn();
 
       builder.Ignore(x => x.Reserves);
+      builder.Ignore(x => x.image);
     }
   }
 }

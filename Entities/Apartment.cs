@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.AspNetCore.Http;
+using System.Collections.Generic;
 
 namespace ApiPJ.Entities {
   public class Apartment {
@@ -13,5 +14,6 @@ namespace ApiPJ.Entities {
     public decimal DailyPrice { get; set; }
 
     public List<Reserve> Reserves { get; set; }
+    public List<IFormFile> image { get; set; }
   }
 }

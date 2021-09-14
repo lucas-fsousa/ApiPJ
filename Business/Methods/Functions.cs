@@ -10,7 +10,6 @@ namespace Business.Methods {
       return Convert.ToBase64String(codify);
     }
 
-
     public static bool ValidateCPF(this string cpf) {
       // Remove invalid spaces
       cpf = cpf.Trim().Replace(".", "").Replace("-", "");

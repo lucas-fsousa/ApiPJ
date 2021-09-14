@@ -1,13 +1,14 @@
 ﻿using ApiPJ.Business.Methods;
 using ApiPJ.Business.Repository.ApartmentDefinition;
+using ApiPJ.Business.Repository.ApartmentImageDefinition;
 using ApiPJ.Entities;
 using ApiPJ.Models.Apartments;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Swashbuckle.AspNetCore.Annotations;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace ApiPJ.Controllers.V1 {
@@ -16,9 +17,11 @@ namespace ApiPJ.Controllers.V1 {
   public class ApartmentController : ControllerBase {
     private readonly ILogger<ApartmentController> _logger;
     private readonly IApartmentRepository _apartment;
+    private readonly IApartmentImageRepository _apartmentImage;
 
-    public ApartmentController(ILogger<ApartmentController> logger, IApartmentRepository apartment) {
+    public ApartmentController(ILogger<ApartmentController> logger, IApartmentRepository apartment, IApartmentImageRepository imageRepository) {
       _logger = logger;
+      _apartmentImage = imageRepository;
       _apartment = apartment;
     }
 
@@ -57,8 +60,6 @@ namespace ApiPJ.Controllers.V1 {
       }
     }
 
-
-
     /// <summary>
     /// Returns a list with all apartments and their availability.
     /// </summary>
@@ -95,8 +96,14 @@ namespace ApiPJ.Controllers.V1 {
         if(apartment == null) {
           return NotFound();
         }
+        var images = await _apartmentImage.GetAllImagesByApartmentId(id);
         _apartment.Delete(apartment);
         await _apartment.Commit();
+
+        foreach(var image in images) {
+          System.IO.File.Delete(Path.Combine(Directory.GetCurrentDirectory(), image.Path));
+        }
+
         return Ok();
       } catch(Exception ex) {
         _logger.LogError(ex.Message);

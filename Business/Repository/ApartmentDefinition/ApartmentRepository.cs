@@ -50,12 +50,14 @@ namespace ApiPJ.Business.Repository.ApartmentDefinition {
       return result;
     }
 
-    public void Delete(Apartment apartment) {
-      var listBlackoutDates = _context.ReserveContext.Select(x => x).Where(x => x.IdApartment == apartment.Id).ToList();
-      foreach(var itemForDelet in listBlackoutDates) {
-        _context.ReserveContext.Remove(itemForDelet);
-      }
-      _context.ApartmentContext.Remove(apartment);
+    public async void Delete(Apartment apartment) {
+      await _context.ReserveContext.Select(x => x).Where(x => x.IdApartment == apartment.Id).ForEachAsync(x => {
+        _context.Remove(x);
+      });
+      await _context.ImagePathContext.Select(x => x).Where(x => x.ApartmentId == apartment.Id).ForEachAsync(x => {
+        _context.Remove(x);
+      });
+      _context.Remove(apartment);
     }
 
     public async void Update(Apartment apartment) {

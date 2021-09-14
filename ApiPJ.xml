@@ -39,6 +39,21 @@
             <param name="apartment"></param>
             <returns></returns>
         </member>
+        <member name="M:ApiPJ.Controllers.V1.ApartmentImageController.UploadFiles(System.Int32,System.Collections.Generic.List{Microsoft.AspNetCore.Http.IFormFile})">
+            <summary>
+            includes images of the apartment
+            </summary>
+            <param name="apartmentId"></param>
+            <param name="files"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ApiPJ.Controllers.V1.ApartmentImageController.DeleteImages(System.Collections.Generic.List{ApiPJ.Entities.ImagePath})">
+            <summary>
+            Deletes an image or an array of images based on the record entered. Expected a list of ImagePath
+            </summary>
+            <param name="images"></param>
+            <returns></returns>
+        </member>
         <member name="M:ApiPJ.Controllers.V1.CustomerController.LogIn(ApiPJ.Models.Login.LoginInputViewModel)">
             <summary>
             Authenticates the user according to the credentials entered.
