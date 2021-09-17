@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Cryptography.KeyDerivation;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Linq;
 
@@ -9,6 +10,7 @@ namespace Business.Methods {
       byte[] codify = KeyDerivation.Pbkdf2(str, salt, KeyDerivationPrf.HMACSHA1, 10000, 256 / 8);
       return Convert.ToBase64String(codify);
     }
+
 
     public static bool ValidateCPF(this string cpf) {
       // Remove invalid spaces

@@ -11,6 +11,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using ApiPJ.Models.ImagePath;
+using System.Drawing;
+using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
 
 namespace ApiPJ.Controllers.V1 {
   [Route("api/[controller]")]
@@ -47,8 +52,9 @@ namespace ApiPJ.Controllers.V1 {
         }
 
         foreach(var file in files) {
-          var pathForDatabase = Path.Combine("Images", $"{DateTime.Now.Ticks.ToString() + apartmentId}-{file.FileName}");
-          var path = Path.Combine(Directory.GetCurrentDirectory(), pathForDatabase);
+          
+          var pathForDatabase = Path.Combine($"{DateTime.Now.Ticks.ToString() + apartmentId}-{file.FileName}");
+          var path = Path.Combine(Directory.GetCurrentDirectory(), "Images", pathForDatabase);
           var stream = new FileStream(path, FileMode.Create);
           await file.CopyToAsync(stream);
 
@@ -67,19 +73,35 @@ namespace ApiPJ.Controllers.V1 {
       }
     }
 
+
     [HttpGet, Route("getImagesByApartmentId/{apartmentId}")]
     public async Task<IActionResult> GetImagesByAparmentId(int apartmentId) {
       try {
         var images = await _apartmentImageRepository.GetAllImagesByApartmentId(apartmentId);
+
         if(images == null) {
           return NotFound();
         }
-        return Ok(images);
+
+        var physicalFiles = new List<PhysicalFileResult>();
+        foreach(var image in images) {
+          var imageInList = new ImagePathOutputModel();
+          var diretorioInformacoes = new DirectoryInfo(Path.Combine(Directory.GetCurrentDirectory(), "Images"));
+          foreach(var item in diretorioInformacoes.GetFiles().Select(x => x).ToList()) {
+            if(item.Name.Equals(image.Path)) {
+              var gg = new PhysicalFileResult(Path.Combine(Directory.GetCurrentDirectory(), "Images", item.Name), imageInList.Exptention);
+              gg.EnableRangeProcessing = true;
+              physicalFiles.Add(gg);
+              }
+            }
+          }
+        return Ok(physicalFiles);
       } catch(Exception ex) {
         _logger.LogError(ex.Message);
         return StatusCode(500, "The request was not completed due to an internal error on the server side.");
       }
     }
+
 
 
     /// <summary>
@@ -97,6 +119,7 @@ namespace ApiPJ.Controllers.V1 {
         if(images == null || images.Count < 1) {
           return BadRequest("The request was invalid.");
         }
+
         foreach(var image in images) {
           var pathForDatabase = image.Path;
           var path = Path.Combine(Directory.GetCurrentDirectory(), pathForDatabase);
