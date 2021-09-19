@@ -24,12 +24,12 @@ namespace ApiPJ.Controllers.V1 {
   [ApiController]
   public class ApartmentImageController : ControllerBase {
     private readonly ILogger<ApartmentImageController> _logger;
-    //private readonly IApartmentImageRepository _apartmentImageRepository;
+    private readonly IApartmentImageRepository _apartmentImageRepository;
     private readonly IApartmentRepository _apartmentRepository;
 
     public ApartmentImageController(ILogger<ApartmentImageController> logger, IApartmentImageRepository imageRepository, IApartmentRepository apartmentRepository) {
       _logger = logger;
-      //_apartmentImageRepository = imageRepository;
+      _apartmentImageRepository = imageRepository;
       _apartmentRepository = apartmentRepository;
     }
 
@@ -61,10 +61,13 @@ namespace ApiPJ.Controllers.V1 {
             ApartmentId = apartmentId,
             Path = pathForDatabase
           };
-          await _apartmentRepository.UploadImages(newImage);
-          await _apartmentRepository.Commit();
-          var stream = new FileStream(path, FileMode.Create);
-          await file.CopyToAsync(stream);
+          await _apartmentImageRepository.UploadImages(newImage);
+          await _apartmentImageRepository.Commit();
+          using(var stream = new FileStream(path, FileMode.Create)) {
+            await file.CopyToAsync(stream);
+          }
+          //var stream = new FileStream(path, FileMode.Create);
+          
         }
 
         return Ok("The request was successfully completed.");
@@ -87,7 +90,7 @@ namespace ApiPJ.Controllers.V1 {
     public async Task<IActionResult> GetImagesByAparmentId(int apartmentId) {
       try {
         //get image names
-        var imagesNameReturned = await _apartmentRepository.GetAllImagesByApartmentId(apartmentId);
+        var imagesNameReturned = await _apartmentImageRepository.GetAllImagesByApartmentId(apartmentId);
         if(imagesNameReturned == null || imagesNameReturned.Count < 1) {
           return NotFound("The requested resource was not found.");
         }
@@ -114,12 +117,12 @@ namespace ApiPJ.Controllers.V1 {
     [SwaggerResponse(statusCode: 500, description: "The request was not completed due to an internal error on the server side.")]
     public async Task<IActionResult> DeleteImages(int idImage) {
       try {
-        var image = await _apartmentRepository.GetImageById(idImage);
+        var image = await _apartmentImageRepository.GetImageById(idImage);
         if(idImage < 1 || image == null) {
           return BadRequest("The request was invalid.");
         }
 
-        _apartmentRepository.DeleteImage(image);
+        await _apartmentImageRepository.DeleteImage(image);
         System.IO.File.Delete(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "files", "images", image.Path));
         await _apartmentRepository.Commit();
         return Ok("The request was successfully completed.");

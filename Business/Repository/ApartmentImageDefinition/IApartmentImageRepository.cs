@@ -7,7 +7,8 @@ using System.Threading.Tasks;
 namespace ApiPJ.Business.Repository.ApartmentImageDefinition {
   public interface IApartmentImageRepository {
     public Task UploadImages(ImagePath imagePath);
-    public void DeleteImage(ImagePath images);
+    public Task DeleteImage(ImagePath images);
+    public Task<ImagePath> GetImageById(int idImage);
     public Task<List<ImagePath>> GetAllImagesByApartmentId(int apartmentId);
     public Task Commit();
   }

@@ -103,13 +103,13 @@ namespace ApiPJ.Controllers.V1 {
           return NotFound();
         }
         var images = await _apartmentImage.GetAllImagesByApartmentId(id);
-        _apartment.Delete(apartment);
-        await _apartment.Commit();
-
+        await _apartment.Delete(apartment);
+        
         foreach(var image in images) {
           System.IO.File.Delete(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "files", "images", image.Path));
         }
 
+        await _apartment.Commit();
         return Ok();
       } catch(Exception ex) {
         _logger.LogError(ex.Message);
@@ -172,7 +172,7 @@ namespace ApiPJ.Controllers.V1 {
           City = apartment.City == oldApartment.City ? oldApartment.City : apartment.City,
           IdAp = id
         };
-        _apartment.Update(newApartment);
+        await _apartment.Update(newApartment);
         await _apartment.Commit();
         return Ok();
       } catch(Exception ex) {

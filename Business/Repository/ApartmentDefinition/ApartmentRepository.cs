@@ -50,17 +50,17 @@ namespace ApiPJ.Business.Repository.ApartmentDefinition {
       return result;
     }
 
-    public async void Delete(Apartment apartment) {
+    public async Task Delete(Apartment apartment) {
       await _context.ReserveContext.Select(x => x).Where(x => x.IdApartment == apartment.IdAp).ForEachAsync(x => {
         _context.Remove(x);
       });
       await _context.ImagePathContext.Select(x => x).Where(x => x.ApartmentId == apartment.IdAp).ForEachAsync(x => {
-        DeleteImage(x);
+        _context.Remove(x);
       });
-      _context.ApartmentContext.Remove(apartment);
+      await Task.FromResult(_context.Remove(apartment));
     }
 
-    public async void Update(Apartment apartment) {
+    public async Task Update(Apartment apartment) {
       await _context.ApartmentContext.Where(x => x.IdAp == apartment.IdAp).ForEachAsync(x => {
         x.MaximumPeoples = apartment.MaximumPeoples;
         x.Localization = apartment.Localization;
@@ -71,21 +71,6 @@ namespace ApiPJ.Business.Repository.ApartmentDefinition {
         x.DailyPrice = apartment.DailyPrice;
         x.City = apartment.City;
       });
-    }
-
-    public async Task UploadImages(ImagePath imagePath) {
-      await _context.ImagePathContext.AddAsync(imagePath);
-    }
-
-    public void DeleteImage(ImagePath image) {
-      _context.ImagePathContext.Remove(image);
-    }
-    public async Task<List<ImagePath>> GetAllImagesByApartmentId(int apartmentId) {
-      return await _context.ImagePathContext.Select(x => x).Where(x => x.ApartmentId == apartmentId).ToListAsync();
-    }
-
-    public async Task<ImagePath> GetImageById(int idImage) {
-      return await _context.ImagePathContext.FirstOrDefaultAsync(x => x.IdImgPath == idImage);
     }
   }
 }

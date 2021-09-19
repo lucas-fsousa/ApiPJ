@@ -19,11 +19,16 @@ namespace ApiPJ.Business.Repository.ApartmentImageDefinition {
       await _context.ImagePathContext.AddAsync(imagePath);
     }
 
-    public void DeleteImage(ImagePath image) {
-      _context.Remove(image);
+    public async Task DeleteImage(ImagePath image) {
+      await Task.FromResult(_context.Remove(image));
     }
     public async Task<List<ImagePath>> GetAllImagesByApartmentId(int apartmentId) {
       return await _context.ImagePathContext.Select(x => x).Where(x => x.ApartmentId == apartmentId).ToListAsync();
     }
+
+    public async Task<ImagePath> GetImageById(int idImage) {
+      return await _context.ImagePathContext.FirstOrDefaultAsync(x => x.IdImgPath == idImage);
+    }
+
   }
 }
