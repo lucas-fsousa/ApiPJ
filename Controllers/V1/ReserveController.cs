@@ -153,7 +153,7 @@ namespace ApiPJ.Controllers.V1 {
           TotalPrice = inputModel.TotalPrice == oldReserve.TotalPrice ? oldReserve.TotalPrice : inputModel.TotalPrice,
           IdCustomer = inputModel.IdCustomer == oldReserve.IdCustomer ? oldReserve.IdCustomer : inputModel.IdCustomer,
           FinalDate = inputModel.FinalDate == oldReserve.FinalDate ? oldReserve.FinalDate : inputModel.FinalDate,
-          Id = oldReserve.Id
+          IdReserve = oldReserve.IdReserve
         };
 
         await _reserveRepository.Update(newReserve);

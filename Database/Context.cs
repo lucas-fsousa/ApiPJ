@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore;
 namespace ApiPJ.Database {
   public class Context: DbContext {
     public Context(DbContextOptions<Context> options) : base(options) { }
-
     public DbSet<Customer> CustomerContext { get; set; }
     public DbSet<FullAdress> FullAdressesContext { get; set; }
     public DbSet<Employee> EmployeeContext { get; set; }

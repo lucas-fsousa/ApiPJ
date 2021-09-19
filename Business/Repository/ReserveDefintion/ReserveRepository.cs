@@ -23,7 +23,7 @@ namespace ApiPJ.Business.Repository.ReserveDefintion {
     }
 
     public Task<Reserve> GetReserve(int id) {
-      return _context.ReserveContext.FirstOrDefaultAsync(x => x.Id == id);
+      return _context.ReserveContext.FirstOrDefaultAsync(x => x.IdReserve == id);
     }
 
     public async Task<List<Reserve>> GetReserves(int CurrentPage, string cpf) {
@@ -43,7 +43,7 @@ namespace ApiPJ.Business.Repository.ReserveDefintion {
 
     // this method is able to update the data contained in the database according to user input.
     public async Task Update(Reserve reserve) {
-      await _context.ReserveContext.Where(x => x.Id == reserve.Id).ForEachAsync(x => {
+      await _context.ReserveContext.Where(x => x.IdReserve == reserve.IdReserve).ForEachAsync(x => {
         x.IdApartment = reserve.IdApartment;
         x.InitialDate = reserve.InitialDate;
         x.IdCustomer = reserve.IdCustomer;

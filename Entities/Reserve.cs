@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace ApiPJ.Entities {
   public class Reserve {
-    public int Id { get; set; }
+    public int IdReserve { get; set; }
     public int IdCustomer { get; set; }
     public int IdApartment { get; set; }
     public decimal TotalPrice { get; set; }

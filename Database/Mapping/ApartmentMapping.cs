@@ -14,10 +14,11 @@ namespace ApiPJ.Database.Mapping {
       builder.Property(x => x.Bedrooms).IsRequired();
       builder.Property(x => x.DailyPrice).IsRequired();
       builder.Property(x => x.City).IsRequired();
-      builder.Property(x => x.Id).UseIdentityColumn();
+      builder.Property(x => x.IdAp).UseIdentityColumn();
+      builder.HasKey(x => x.IdAp);
 
       builder.Ignore(x => x.Reserves);
-      builder.Ignore(x => x.image);
+      builder.Ignore(x => x.Images);
     }
   }
 }

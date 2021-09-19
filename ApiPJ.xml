@@ -47,11 +47,18 @@
             <param name="files"></param>
             <returns></returns>
         </member>
-        <member name="M:ApiPJ.Controllers.V1.ApartmentImageController.DeleteImages(System.Collections.Generic.List{ApiPJ.Entities.ImagePath})">
+        <member name="M:ApiPJ.Controllers.V1.ApartmentImageController.GetImagesByAparmentId(System.Int32)">
+            <summary>
+            makes the query in the image bank and returns all the images corresponding to the entered ID
+            </summary>
+            <param name="apartmentId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ApiPJ.Controllers.V1.ApartmentImageController.DeleteImages(System.Int32)">
             <summary>
             Deletes an image or an array of images based on the record entered. Expected a list of ImagePath
             </summary>
-            <param name="images"></param>
+            <param name="idImage"></param>
             <returns></returns>
         </member>
         <member name="M:ApiPJ.Controllers.V1.CustomerController.LogIn(ApiPJ.Models.Login.LoginInputViewModel)">

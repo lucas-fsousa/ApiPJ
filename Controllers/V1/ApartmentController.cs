@@ -3,6 +3,7 @@ using ApiPJ.Business.Repository.ApartmentDefinition;
 using ApiPJ.Business.Repository.ApartmentImageDefinition;
 using ApiPJ.Entities;
 using ApiPJ.Models.Apartments;
+using Business.Methods;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Swashbuckle.AspNetCore.Annotations;
@@ -71,8 +72,13 @@ namespace ApiPJ.Controllers.V1 {
     [SwaggerResponse(statusCode: 500, description: "The request was not completed due to an internal error on the server side.")]
     public async Task<IActionResult> GetApartments() {
       try {
-        var result = await _apartment.GetApartments();
-        return Ok(result);
+        var allApartments = await _apartment.GetApartments();
+        foreach(var apartment in allApartments) {
+          var imagesNameReturned = await _apartmentImage.GetAllImagesByApartmentId(apartment.IdAp);
+          var listImageUrl = Functions.GenerateImageUrl(imagesNameReturned, $"{HttpContext.Request.Host.Value}/images");
+          apartment.Images = listImageUrl;
+        }
+        return Ok(allApartments);
       } catch(Exception ex) {
         _logger.LogError(ex.Message);
         return new StatusCodeResult(500);
@@ -101,7 +107,7 @@ namespace ApiPJ.Controllers.V1 {
         await _apartment.Commit();
 
         foreach(var image in images) {
-          System.IO.File.Delete(Path.Combine(Directory.GetCurrentDirectory(), image.Path));
+          System.IO.File.Delete(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "files", "images", image.Path));
         }
 
         return Ok();
@@ -127,7 +133,12 @@ namespace ApiPJ.Controllers.V1 {
         var result = await _apartment.GetApartment(id);
         if(result == null) {
           return NotFound();
+        } else {
+          var imagesNameReturned = await _apartmentImage.GetAllImagesByApartmentId(id);
+          var listImageUrl = Functions.GenerateImageUrl(imagesNameReturned, $"{HttpContext.Request.Host.Value}/images");
+          result.Images = listImageUrl;
         }
+
         return Ok(result);
       } catch(Exception ex) {
         _logger.LogError(ex.Message);
@@ -159,7 +170,7 @@ namespace ApiPJ.Controllers.V1 {
           Bedrooms = apartment.Bedrooms == oldApartment.Bedrooms ? oldApartment.Bedrooms : apartment.Bedrooms,
           DailyPrice = apartment.DailyPrice == oldApartment.DailyPrice ? oldApartment.DailyPrice : apartment.DailyPrice,
           City = apartment.City == oldApartment.City ? oldApartment.City : apartment.City,
-          Id = id
+          IdAp = id
         };
         _apartment.Update(newApartment);
         await _apartment.Commit();

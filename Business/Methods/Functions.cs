@@ -1,6 +1,11 @@
-﻿using Microsoft.AspNetCore.Cryptography.KeyDerivation;
+﻿using ApiPJ.Entities;
+using ApiPJ.Models.ImagePath;
+using Microsoft.AspNetCore.Cryptography.KeyDerivation;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace Business.Methods {
@@ -11,6 +16,25 @@ namespace Business.Methods {
       return Convert.ToBase64String(codify);
     }
 
+    public static List<ImagePath> GenerateImageUrl(List<ImagePath> value, string localhost) {
+      //local variables
+      var localPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "files", "images");
+      var directoryInfo = new DirectoryInfo(localPath).GetFiles().Select(x => x).ToList();
+      var outputList = new List<ImagePath>();
+      foreach(var image in value) {
+        var singleOutput = new ImagePath();
+        foreach(var item in directoryInfo) {
+          if(item.Name.Equals(image.Path)) {
+            singleOutput.IdImgPath = image.IdImgPath;
+            singleOutput.ApartmentId = image.ApartmentId;
+            singleOutput.Path = $"{localhost}/{image.Path}";
+
+            outputList.Add(singleOutput);
+          }
+        }
+      }
+      return outputList;
+    }
 
     public static bool ValidateCPF(this string cpf) {
       // Remove invalid spaces

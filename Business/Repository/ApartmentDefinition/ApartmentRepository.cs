@@ -22,14 +22,14 @@ namespace ApiPJ.Business.Repository.ApartmentDefinition {
     }
 
     public async Task<List<Apartment>> GetApartments() {
-      var listApartment = _context.ApartmentContext.Select(x => x).ToList();
-      var listReserve = _context.ReserveContext.Select(x => x).ToList();
+      var listApartment = await _context.ApartmentContext.Select(x => x).ToListAsync();
+      var listReserve = await _context.ReserveContext.Select(x => x).ToListAsync();
       var list = new List<Apartment>();
 
       foreach(var apartment in listApartment) {
         var allReserves = new List<Reserve>();
         foreach(var reserve in listReserve) {
-          if(apartment.Id == reserve.IdApartment) {
+          if(apartment.IdAp == reserve.IdApartment) {
             allReserves.Add(reserve);
           }
         }
@@ -46,22 +46,22 @@ namespace ApiPJ.Business.Repository.ApartmentDefinition {
       if(result == null) {
         return null;
       }
-      result.Reserves = _context.ReserveContext.Select(x => x).Where(x => x.IdApartment == id).ToList();
+      result.Reserves = await _context.ReserveContext.Select(x => x).Where(x => x.IdApartment == id).ToListAsync();
       return result;
     }
 
     public async void Delete(Apartment apartment) {
-      await _context.ReserveContext.Select(x => x).Where(x => x.IdApartment == apartment.Id).ForEachAsync(x => {
+      await _context.ReserveContext.Select(x => x).Where(x => x.IdApartment == apartment.IdAp).ForEachAsync(x => {
         _context.Remove(x);
       });
-      await _context.ImagePathContext.Select(x => x).Where(x => x.ApartmentId == apartment.Id).ForEachAsync(x => {
-        _context.Remove(x);
+      await _context.ImagePathContext.Select(x => x).Where(x => x.ApartmentId == apartment.IdAp).ForEachAsync(x => {
+        DeleteImage(x);
       });
-      _context.Remove(apartment);
+      _context.ApartmentContext.Remove(apartment);
     }
 
     public async void Update(Apartment apartment) {
-      await _context.ApartmentContext.Where(x => x.Id == apartment.Id).ForEachAsync(x => {
+      await _context.ApartmentContext.Where(x => x.IdAp == apartment.IdAp).ForEachAsync(x => {
         x.MaximumPeoples = apartment.MaximumPeoples;
         x.Localization = apartment.Localization;
         x.Description = apartment.Description;
@@ -71,6 +71,21 @@ namespace ApiPJ.Business.Repository.ApartmentDefinition {
         x.DailyPrice = apartment.DailyPrice;
         x.City = apartment.City;
       });
+    }
+
+    public async Task UploadImages(ImagePath imagePath) {
+      await _context.ImagePathContext.AddAsync(imagePath);
+    }
+
+    public void DeleteImage(ImagePath image) {
+      _context.ImagePathContext.Remove(image);
+    }
+    public async Task<List<ImagePath>> GetAllImagesByApartmentId(int apartmentId) {
+      return await _context.ImagePathContext.Select(x => x).Where(x => x.ApartmentId == apartmentId).ToListAsync();
+    }
+
+    public async Task<ImagePath> GetImageById(int idImage) {
+      return await _context.ImagePathContext.FirstOrDefaultAsync(x => x.IdImgPath == idImage);
     }
   }
 }

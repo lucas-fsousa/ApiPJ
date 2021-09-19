@@ -9,8 +9,8 @@ using System.Threading.Tasks;
 namespace ApiPJ.Database.Mapping {
   public class ImagePathsMapping : IEntityTypeConfiguration<ImagePath> {
     public void Configure(EntityTypeBuilder<ImagePath> builder) {
-      builder.ToTable("TB_IMAGEPATH").HasKey(x => x.Id);
-      builder.Property(x => x.Id).ValueGeneratedOnAdd();
+      builder.ToTable("TB_IMAGEPATH").HasKey(x => x.IdImgPath);
+      builder.Property(x => x.IdImgPath).ValueGeneratedOnAdd();
       builder.Property(x => x.ApartmentId).IsRequired();
       builder.Property(x => x.Path).IsRequired();
       builder.HasIndex(x => x.Path).IsUnique();

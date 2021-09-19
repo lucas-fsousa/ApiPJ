@@ -18,6 +18,8 @@ using ApiPJ.Business.Repository.EmployeeDefinition;
 using ApiPJ.Business.Repository.ApartmentDefinition;
 using ApiPJ.Business.Repository.ReserveDefintion;
 using ApiPJ.Business.Repository.ApartmentImageDefinition;
+using Microsoft.Extensions.FileProviders;
+using Microsoft.AspNetCore.Http;
 
 namespace ApiPJ {
   public class Startup {
@@ -95,6 +97,7 @@ namespace ApiPJ {
       services.AddScoped<IApartmentImageRepository, ApartmentImageRepository>();
       services.AddScoped<IApartmentRepository, ApartmentRepository>();
       services.AddScoped<IAuthenticationService, JwtTokenService>();
+
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -106,6 +109,12 @@ namespace ApiPJ {
       }
 
       app.UseHttpsRedirection();
+
+      app.UseStaticFiles();
+      app.UseStaticFiles(new StaticFileOptions {
+        FileProvider = new PhysicalFileProvider(Path.Combine(env.ContentRootPath, "wwwroot", "files", "images")),
+        RequestPath = new PathString("/files/images")
+      });
 
       app.UseRouting();
 
