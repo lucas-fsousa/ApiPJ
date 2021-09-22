@@ -4,6 +4,7 @@ using ApiPJ.Business.Repository.CustomerDefinition;
 using ApiPJ.Business.Repository.ReserveDefintion;
 using ApiPJ.Entities;
 using ApiPJ.Models.Reserve;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Swashbuckle.AspNetCore.Annotations;
@@ -11,11 +12,10 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace ApiPJ.Controllers.V1 {
   [Route("api/v1/[controller]")]
   [ApiController]
+  //[Authorize]
   public class ReserveController : ControllerBase {
 
     private readonly IApartmentRepository _apartmentRepository;
@@ -30,6 +30,7 @@ namespace ApiPJ.Controllers.V1 {
     /// <summary>
     /// Returns a list of paged reservations with 10 results per page
     /// </summary>
+    /// <param name="CurrentPage"></param>
     /// <returns></returns>
     [HttpGet, Route("getReserves")]
     [SwaggerResponse(statusCode: 500, "The request was not completed due to an internal error on the server side.")]
@@ -71,7 +72,6 @@ namespace ApiPJ.Controllers.V1 {
       }
     }
 
-
     /// <summary>
     /// Returns a reservation based on the given identifier
     /// </summary>
@@ -93,7 +93,6 @@ namespace ApiPJ.Controllers.V1 {
         return new StatusCodeResult(500);
       }
     }
-
 
     /// <summary>
     /// add a new apartment reservation

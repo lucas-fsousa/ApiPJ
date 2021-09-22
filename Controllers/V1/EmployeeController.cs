@@ -64,7 +64,6 @@ namespace ApiPJ.Controllers.V1 {
     /// <param name="registerInputModel"></param>
     /// <returns>May return Ok(code 200), BadRequest(code 400) or internal error(code 500)</returns>
     [HttpPost, Route("register")]
-    //[Authorize]
     [SwaggerResponse(statusCode: 200, description: "The request was successfully completed.")]
     [SwaggerResponse(statusCode: 400, description: "The request was invalid. Check the parameters and try again.")]
     [SwaggerResponse(statusCode: 500, description: "The request was not completed due to an internal error on the server side.")]
@@ -124,7 +123,6 @@ namespace ApiPJ.Controllers.V1 {
     /// <param name="cpf"></param>
     /// <returns>May return Ok(code 200), notFound(code 404), Unauthorized(code 401) or internal error(code 500)</returns>
     [HttpDelete, Route("delete")]
-    //[Authorize]
     [SwaggerResponse(statusCode: 200, description: "The request was successfully completed.")]
     [SwaggerResponse(statusCode: 401, description: "The request did not include an authentication token or the authentication token was expired.")]
     [SwaggerResponse(statusCode: 404, description: "The requested resource was not found")]
@@ -155,7 +153,6 @@ namespace ApiPJ.Controllers.V1 {
     /// <param name="userUpdate"></param>
     /// <returns>May return Ok(code 200), badRequest(code 400), Unauthorized(code 401) or internal error(code 500)</returns>
     [HttpPut, Route("update")]
-    //[Authorize]
     [SwaggerResponse(statusCode: 200, description: "The request was successfully completed.")]
     [SwaggerResponse(statusCode: 401, description: "The request did not include an authentication token or the authentication token was expired.")]
     [SwaggerResponse(statusCode: 400, description: "The request was invalid. Check the parameters and try again.")]
@@ -215,7 +212,6 @@ namespace ApiPJ.Controllers.V1 {
     /// <param name="cpf"></param>
     /// <returns>May return Ok(code 200), notFound(code 404), Unauthorized(code 401) or internal error(code 500)</returns>
     [HttpGet, Route("getEmployee")]
-    //[Authorize]
     [SwaggerResponse(statusCode: 500, description: "The request was not completed due to an internal error on the server side.")]
     [SwaggerResponse(statusCode: 401, description: "The request did not include an authentication token or the authentication token was expired.")]
     [SwaggerResponse(statusCode: 404, description: "The requested resource was not found")]
@@ -261,7 +257,6 @@ namespace ApiPJ.Controllers.V1 {
     /// </summary>
     /// <param name="currentPage"></param>
     /// <returns>May return Ok(code 200), Unauthorized(code 401), badRequest(code 400) or internal error(code 500)</returns>
-    //[Authorize]
     [HttpGet, Route("getEmployees")]
     [SwaggerResponse(statusCode: 500, description: "The request was not completed due to an internal error on the server side.")]
     [SwaggerResponse(statusCode: 401, description: "The request did not include an authentication token or the authentication token was expired.")]

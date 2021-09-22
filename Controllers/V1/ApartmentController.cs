@@ -4,6 +4,7 @@ using ApiPJ.Business.Repository.ApartmentImageDefinition;
 using ApiPJ.Entities;
 using ApiPJ.Models.Apartments;
 using Business.Methods;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Swashbuckle.AspNetCore.Annotations;
@@ -15,6 +16,7 @@ using System.Threading.Tasks;
 namespace ApiPJ.Controllers.V1 {
   [Route("api/v1/[controller]")]
   [ApiController]
+  //[Authorize]
   public class ApartmentController : ControllerBase {
     private readonly ILogger<ApartmentController> _logger;
     private readonly IApartmentRepository _apartment;
@@ -31,7 +33,6 @@ namespace ApiPJ.Controllers.V1 {
     /// </summary>
     /// <param name="inputModel"></param>
     /// <returns></returns>
-    //[Authorize]
     [HttpPost, Route("register")]
     [SwaggerResponse(statusCode: 401, description: "The request did not include an authentication token or the authentication token was expired.")]
     [SwaggerResponse(statusCode: 200, description: "The request was successfully completed.", Type = typeof(Apartment))]
@@ -65,7 +66,6 @@ namespace ApiPJ.Controllers.V1 {
     /// Returns a list with all apartments and their availability.
     /// </summary>
     /// <returns></returns>
-    //[Authorize]
     [HttpGet, Route("getApartments")]
     [SwaggerResponse(statusCode: 401, description: "The request did not include an authentication token or the authentication token was expired.")]
     [SwaggerResponse(statusCode: 200, description: "The request was successfully completed.", Type = typeof(List<Apartment>))]
@@ -90,7 +90,6 @@ namespace ApiPJ.Controllers.V1 {
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
-    //[Authorize]
     [HttpDelete, Route("delete/{id}")]
     [SwaggerResponse(statusCode: 401, description: "The request did not include an authentication token or the authentication token was expired.")]
     [SwaggerResponse(statusCode: 200, description: "The request was successfully completed.")]
@@ -122,7 +121,6 @@ namespace ApiPJ.Controllers.V1 {
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
-    //[Authorize]
     [HttpGet, Route("getApartment/{id}")]
     [SwaggerResponse(statusCode: 401, description: "The request did not include an authentication token or the authentication token was expired.")]
     [SwaggerResponse(statusCode: 200, description: "The request was successfully completed.", Type = typeof(Apartment))]

@@ -151,6 +151,7 @@
             <summary>
             Returns a list of paged reservations with 10 results per page
             </summary>
+            <param name="CurrentPage"></param>
             <returns></returns>
         </member>
         <member name="M:ApiPJ.Controllers.V1.ReserveController.GetReservesByCpf(System.Int32,System.String)">
