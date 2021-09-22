@@ -18,6 +18,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using Microsoft.Extensions.Hosting.Internal;
 using Business.Methods;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ApiPJ.Controllers.V1 {
   [Route("api/[controller]")]
@@ -46,6 +47,7 @@ namespace ApiPJ.Controllers.V1 {
     [SwaggerResponse(statusCode: 500, description: "The request was not completed due to an internal error on the server side.")]
     [FilterValidState]
     [HttpPost, Route("uploadFiles/{apartmentId}")]
+    //[Authorize]
     public async Task<IActionResult> UploadFiles(int apartmentId, List<IFormFile> files) {
       try {
         var apartmentConfirm = await _apartmentRepository.GetApartment(apartmentId);
@@ -95,6 +97,7 @@ namespace ApiPJ.Controllers.V1 {
     [SwaggerResponse(statusCode: 200, description: "The request was successfully completed.", Type = typeof(List<ImagePath>))]
     [SwaggerResponse(statusCode: 500, description: "The request was not completed due to an internal error on the server side.")]
     [HttpGet, Route("getImagesByApartmentId/{apartmentId}")]
+    //[Authorize]
     public async Task<IActionResult> GetImagesByAparmentId(int apartmentId) {
       try {
         //get image names
@@ -118,6 +121,7 @@ namespace ApiPJ.Controllers.V1 {
     /// </summary>
     /// <param name="idImage"></param>
     /// <returns></returns>
+    //[Authorize]
     [HttpDelete, Route("deleteImages/{idImage}")]
     [SwaggerResponse(statusCode: 401, description: "The request did not include an authentication token or the authentication token was expired.")]
     [SwaggerResponse(statusCode: 400, description: "The request was invalid. Check the parameters and try again.")]
