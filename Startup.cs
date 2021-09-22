@@ -111,10 +111,10 @@ namespace ApiPJ {
       app.UseHttpsRedirection();
 
       app.UseStaticFiles();
-      app.UseStaticFiles(new StaticFileOptions {
-        FileProvider = new PhysicalFileProvider(Path.Combine(env.ContentRootPath, "wwwroot", "files", "images")),
-        RequestPath = new PathString("/files/images")
-      });
+      //app.UseStaticFiles(new StaticFileOptions {
+      //  FileProvider = new PhysicalFileProvider(Path.Combine(env.ContentRootPath, "wwwroot", "files", "images")),
+      //  RequestPath = new PathString("/files/images")
+      //});
 
       app.UseRouting();
 
