@@ -27,7 +27,7 @@ namespace Business.Methods {
           if(item.Name.Equals(image.Path)) {
             singleOutput.IdImgPath = image.IdImgPath;
             singleOutput.ApartmentId = image.ApartmentId;
-            singleOutput.Path = $"{localhost}/{image.Path}";
+            singleOutput.Path = $"https://{localhost}/files/images/{image.Path}";
 
             outputList.Add(singleOutput);
           }

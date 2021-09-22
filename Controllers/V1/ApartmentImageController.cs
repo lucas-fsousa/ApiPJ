@@ -95,7 +95,7 @@ namespace ApiPJ.Controllers.V1 {
           return NotFound("The requested resource was not found.");
         }
 
-        var listImageUrl = Functions.GenerateImageUrl(imagesNameReturned, $"{HttpContext.Request.Host.Value}/files/images");
+        var listImageUrl = Functions.GenerateImageUrl(imagesNameReturned, $"{HttpContext.Request.Host.Value}");
         return Ok(listImageUrl);
       } catch(Exception ex) {
         _logger.LogError(ex.Message);

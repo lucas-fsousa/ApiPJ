@@ -75,7 +75,7 @@ namespace ApiPJ.Controllers.V1 {
         var allApartments = await _apartment.GetApartments();
         foreach(var apartment in allApartments) {
           var imagesNameReturned = await _apartmentImage.GetAllImagesByApartmentId(apartment.IdAp);
-          var listImageUrl = Functions.GenerateImageUrl(imagesNameReturned, $"{HttpContext.Request.Host.Value}/images");
+          var listImageUrl = Functions.GenerateImageUrl(imagesNameReturned, $"{HttpContext.Request.Host.Value}");
           apartment.Images = listImageUrl;
         }
         return Ok(allApartments);
@@ -135,7 +135,7 @@ namespace ApiPJ.Controllers.V1 {
           return NotFound();
         } else {
           var imagesNameReturned = await _apartmentImage.GetAllImagesByApartmentId(id);
-          var listImageUrl = Functions.GenerateImageUrl(imagesNameReturned, $"{HttpContext.Request.Host.Value}/images");
+          var listImageUrl = Functions.GenerateImageUrl(imagesNameReturned, $"{HttpContext.Request.Host.Value}");
           result.Images = listImageUrl;
         }
 
