@@ -53,6 +53,14 @@ namespace ApiPJ.Controllers.V1 {
           return BadRequest("The request was invalid.");
         }
 
+        // checks the format of the files entered.
+        foreach(var file in files) {
+          string[] contentTypes = { "image/jpeg", "image/jpg", "image/png" };
+          if(!contentTypes.Contains(file.ContentType)) {
+            return BadRequest("there are files with an invalid format. Valid formats (jpeg, jpg, png)");
+          }
+        }
+
         foreach(var file in files) {
 
           var pathForDatabase = Path.Combine($"{DateTime.Now.Ticks.ToString() + apartmentId}-{file.FileName}");
