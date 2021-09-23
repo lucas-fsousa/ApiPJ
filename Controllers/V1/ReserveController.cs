@@ -97,22 +97,23 @@ namespace ApiPJ.Controllers.V1 {
     /// <summary>
     /// add a new apartment reservation
     /// </summary>
+    /// <param name="apartmentId"></param>
     /// <param name="inputModel"></param>
     /// <returns></returns>
-    [HttpPost, Route("register")]
+    [HttpPost, Route("register/{apartmentId}")]
     [SwaggerResponse(statusCode: 500, "The request was not completed due to an internal error on the server side.")]
     [SwaggerResponse(statusCode: 400, "The requested resource was not found")]
     [SwaggerResponse(statusCode: 200, "The request was successfully completed.")]
     [FilterValidState]
-    public async Task<IActionResult> Register([FromBody] ReserveInputModel inputModel) {
+    public async Task<IActionResult> Register(int apartmentId, [FromBody]ReserveInputModel inputModel) {
       try {
-        var ValidateInputIds = await _apartmentRepository.GetApartment(inputModel.IdApartment);
+        var ValidateInputIds = await _apartmentRepository.GetApartment(apartmentId);
         if(ValidateInputIds == null) {
           return BadRequest("The request was invalid.");
         }
 
         var newReserve = new Reserve {
-          IdApartment = inputModel.IdApartment,
+          IdApartment = apartmentId,
           IdCustomer = inputModel.IdCustomer,
           TotalPrice = inputModel.TotalPrice,
           FinalDate = inputModel.FinalDate,

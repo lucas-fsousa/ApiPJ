@@ -169,10 +169,11 @@
             <param name="id"></param>
             <returns></returns>
         </member>
-        <member name="M:ApiPJ.Controllers.V1.ReserveController.Register(ApiPJ.Models.Reserve.ReserveInputModel)">
+        <member name="M:ApiPJ.Controllers.V1.ReserveController.Register(System.Int32,ApiPJ.Models.Reserve.ReserveInputModel)">
             <summary>
             add a new apartment reservation
             </summary>
+            <param name="apartmentId"></param>
             <param name="inputModel"></param>
             <returns></returns>
         </member>

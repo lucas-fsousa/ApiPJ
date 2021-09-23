@@ -16,9 +16,6 @@ namespace ApiPJ.Models.Reserve {
     public decimal TotalPrice { get; set; }
 
     [Required(ErrorMessage = "This field is strictly necessary. Fill in correctly.")]
-    public int IdApartment { get; set; }
-
-    [Required(ErrorMessage = "This field is strictly necessary. Fill in correctly.")]
     public int IdCustomer { get; set; }
 
     [Required(ErrorMessage = "This field is strictly necessary. Fill in correctly.")]
