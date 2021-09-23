@@ -20,5 +20,7 @@ namespace ApiPJ.Models.Reserve {
 
     [Required(ErrorMessage = "This field is strictly necessary. Fill in correctly.")]
     public DateTime FinalDate { get; set; }
+    public DateTime Checkin { get; set; }
+    public DateTime Checkout { get; set; }
   }
 }

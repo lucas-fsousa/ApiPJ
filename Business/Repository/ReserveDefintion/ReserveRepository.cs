@@ -49,6 +49,8 @@ namespace ApiPJ.Business.Repository.ReserveDefintion {
         x.IdCustomer = reserve.IdCustomer;
         x.TotalPrice = reserve.TotalPrice;
         x.FinalDate = reserve.FinalDate;
+        x.Checkout = reserve.Checkout;
+        x.Checkin = reserve.Checkin;
       });
     }
   }

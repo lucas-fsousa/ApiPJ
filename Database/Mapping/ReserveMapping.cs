@@ -16,6 +16,8 @@ namespace ApiPJ.Database.Mapping {
       builder.Property(x => x.IdCustomer).ValueGeneratedNever().IsRequired();
       builder.Property(x => x.IdApartment).ValueGeneratedNever().IsRequired();
       builder.Property(x => x.TotalPrice).ValueGeneratedNever().IsRequired().HasPrecision(18, 2);
+      builder.Property(x => x.Checkin);
+      builder.Property(x => x.Checkout);
     }
   }
 }

@@ -1,25 +1,23 @@
+using ApiPJ.Business.Repository.ApartmentDefinition;
+using ApiPJ.Business.Repository.ApartmentImageDefinition;
+using ApiPJ.Business.Repository.CustomerDefinition;
+using ApiPJ.Business.Repository.EmployeeDefinition;
+using ApiPJ.Business.Repository.ReserveDefintion;
+using ApiPJ.Configurations.Security;
 using ApiPJ.Database;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System;
 using System.IO;
 using System.Reflection;
 using System.Text;
-using Microsoft.IdentityModel.Tokens;
-using ApiPJ.Business.Repository.CustomerDefinition;
-using ApiPJ.Configurations.Security;
-using ApiPJ.Business.Repository.EmployeeDefinition;
-using ApiPJ.Business.Repository.ApartmentDefinition;
-using ApiPJ.Business.Repository.ReserveDefintion;
-using ApiPJ.Business.Repository.ApartmentImageDefinition;
-using Microsoft.Extensions.FileProviders;
-using Microsoft.AspNetCore.Http;
 
 namespace ApiPJ {
   public class Startup {

@@ -11,5 +11,7 @@ namespace ApiPJ.Entities {
     public decimal TotalPrice { get; set; }
     public DateTime InitialDate { get; set; }
     public DateTime FinalDate { get; set; }
+    public DateTime Checkin { get; set; }
+    public DateTime Checkout { get; set; }
   }
 }

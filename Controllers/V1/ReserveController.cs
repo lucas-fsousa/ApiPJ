@@ -153,6 +153,8 @@ namespace ApiPJ.Controllers.V1 {
           TotalPrice = inputModel.TotalPrice == oldReserve.TotalPrice ? oldReserve.TotalPrice : inputModel.TotalPrice,
           IdCustomer = inputModel.IdCustomer == oldReserve.IdCustomer ? oldReserve.IdCustomer : inputModel.IdCustomer,
           FinalDate = inputModel.FinalDate == oldReserve.FinalDate ? oldReserve.FinalDate : inputModel.FinalDate,
+          Checkout = inputModel.Checkout == oldReserve.Checkout ? oldReserve.Checkout : inputModel.Checkout,
+          Checkin = inputModel.Checkin == oldReserve.Checkin ? oldReserve.Checkin : inputModel.Checkin,
           IdReserve = oldReserve.IdReserve
         };
 
