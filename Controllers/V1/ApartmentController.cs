@@ -4,7 +4,6 @@ using ApiPJ.Business.Repository.ApartmentImageDefinition;
 using ApiPJ.Entities;
 using ApiPJ.Models.Apartments;
 using Business.Methods;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Swashbuckle.AspNetCore.Annotations;
