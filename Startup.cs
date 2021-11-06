@@ -41,7 +41,17 @@ namespace ApiPJ {
         var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
         c.IncludeXmlComments(xmlPath);
 
-        c.SwaggerDoc("v1", new OpenApiInfo { Title = "ApiPJ", Version = "v1" });
+        c.SwaggerDoc("v1", new OpenApiInfo { 
+            Title = "Projeto de Integração Multidisciplinar",
+            Version = "v1",
+            Contact = new OpenApiContact
+            {
+                Email = "Lucasads18@outlook.com",
+                Name = "Lucas Sousa",
+                Url = new Uri("https://www.linkedin.com/feed/"),
+            },
+            Description = "Projeto para uma rede hoteleira com intuito de realizar o controle geral da rede de hotéis, clientes e funcionários."
+        });
 
         // ============= START AUTHENTICATION CONFIGURATION BEARER =========
         c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme {
